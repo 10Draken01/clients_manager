@@ -1,26 +1,43 @@
 
-import 'package:clients_manager/features/login/domain/usecase/create_request_usecase.dart';
-import 'package:clients_manager/features/login/domain/usecase/login_usecase.dart';
-import 'package:clients_manager/features/login/presentation/pages/login_screen.dart';
+import 'package:clients_manager/core/di/injection_container.dart';
+import 'package:clients_manager/core/network/http_service.dart';
+import 'package:clients_manager/core/routes/app_routes.dart';
+import 'package:clients_manager/core/theme/app_theme.dart';
 import 'package:clients_manager/features/login/presentation/providers/login_provider.dart';
+import 'package:clients_manager/features/register/presentation/providers/register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
-  final LoginUsecase loginUsecase;
-  final CreateRequestUsecase createRequestUsecase;
-  const MyApp({super.key, required this.loginUsecase, required this.createRequestUsecase});
+  final InjectionContainer injectionContainer;
+  const MyApp({super.key, required this.injectionContainer});
 
   @override
   Widget build(BuildContext context) {
     return (
         MultiProvider(
           providers: [
-          ChangeNotifierProvider(
-            create: (_) => LoginProvider(loginUseCase: loginUsecase, createRequestUseCase: createRequestUsecase)),
+            Provider<HttpService>(
+              create: (_) => injectionContainer.httpService
+            ),
+            ChangeNotifierProvider(
+              create: (_) => LoginProvider(
+                  loginUseCase: injectionContainer.loginUsecase, 
+                  createLoginRequestUseCase: injectionContainer.createLoginRequestUseCase
+                )
+            ),
+            ChangeNotifierProvider(
+              create: (_) => RegisterProvider(
+                registerUseCase: injectionContainer.registerUseCase, 
+                createRegisterRequestUseCase: injectionContainer.createRegisterRequestUseCase),
+            )
           ],
           child: MaterialApp(
-            home: LoginScreen(),
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme, // Tema oscuro opcional
+            themeMode: ThemeMode.system, // S
+            initialRoute: AppRoutes.login,
+            routes: AppRoutes.routes,
           )
     ));
   }

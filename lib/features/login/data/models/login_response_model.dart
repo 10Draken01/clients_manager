@@ -8,6 +8,13 @@ class LoginResponseModel extends LoginResponse {
     : super(success: success, message: message);
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
-    return LoginResponseModel(success: json['success'], message: json['message']);
+    return LoginResponseModel(
+      success: json['success'],
+      message: json['message'],
+    );
+  }
+
+  LoginResponse toEntity() {
+    return LoginResponse(success: success, message: message);
   }
 }

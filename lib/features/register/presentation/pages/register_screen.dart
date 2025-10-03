@@ -2,12 +2,12 @@ import 'package:clients_manager/core/models/form_field_config.dart';
 import 'package:clients_manager/core/routes/app_routes.dart';
 import 'package:clients_manager/core/widgets/atoms/message_response_form.dart';
 import 'package:clients_manager/core/widgets/molecules/custom_form_normal.dart';
-import 'package:clients_manager/features/login/presentation/providers/login_provider.dart';
+import 'package:clients_manager/features/register/presentation/providers/register_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +26,12 @@ class LoginScreen extends StatelessWidget {
               children: [
                 // 🎭 Logo o ícono con color del tema
                 Icon(
-                  Icons.lock_person_rounded,
+                  Icons.face_unlock_outlined,
                   size: 100,
                   color: colorScheme.primary,
                 ),
                 const SizedBox(height: 20),
-                
+
                 // 📝 Título con estilo del tema
                 Text(
                   'Bienvenido',
@@ -41,28 +41,29 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                
+
                 // 📝 Subtítulo
                 Text(
-                  'Inicia sesión para continuar',
+                  'Registrese para continuar',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colorScheme.onBackground.withOpacity(0.6),
                   ),
                 ),
                 const SizedBox(height: 40),
-                
+
                 // 🎯 FORMULARIO con Consumer para optimizar
-                Consumer<LoginProvider>(
+                Consumer<RegisterProvider>(
                   builder: (context, provider, child) {
                     return CustomFormNormal(
                       fields: [
+                        FormFieldConfig.username(),
                         FormFieldConfig.email(),
                         FormFieldConfig.password(),
                       ],
-                      onSubmit: provider.handleLogin,
-                      submitButtonText: 'Iniciar Sesión',
+                      onSubmit: provider.handleRegister,
+                      submitButtonText: 'Registrarse',
                       isLoading: provider.isLoading,
-                      
+
                       // 📢 Widget de mensaje adaptativo al tema
                       messageWidget: provider.message != null
                           ? MessageResponseForm(
@@ -74,15 +75,15 @@ class LoginScreen extends StatelessWidget {
                     );
                   },
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 // 🔗 Link de registro
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '¿No tienes cuenta? ',
+                      '¿Ya tienes cuenta? ',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: colorScheme.onBackground.withOpacity(0.6),
                       ),
@@ -90,8 +91,8 @@ class LoginScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         // TODO: Navegar a registro
-                        AppRoutes.navigateTo(context, AppRoutes.register);
-                        print('Ir a registro');
+                        AppRoutes.goBack(context);
+                        print('Ir a login');
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
@@ -99,7 +100,7 @@ class LoginScreen extends StatelessWidget {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: Text(
-                        'Regístrate',
+                        'Iniciar Sesión',
                         style: TextStyle(
                           color: colorScheme.primary,
                           fontWeight: FontWeight.bold,
