@@ -1,7 +1,6 @@
-import 'package:clients_manager/features/login/domain/entities/login_response.dart';
-import 'package:clients_manager/features/register/domain/entities/register_response.dart';
+import 'package:clients_manager/features/register/domain/data_transfer_objects/response_register_d_t_o.dart';
 
-class RegisterResponseModel extends LoginResponse {
+class RegisterResponseModel extends ResponseRegisterDTO {
   final bool success;
   final String message;
 
@@ -15,7 +14,7 @@ class RegisterResponseModel extends LoginResponse {
     );
   }
 
-  RegisterResponse toEntity() {
-    return RegisterResponse(success: success, message: message);
+  ResponseRegisterDTO toEntity() {
+    return ResponseRegisterDTO(success: success, message: message);
   }
 }

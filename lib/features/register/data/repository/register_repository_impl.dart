@@ -1,6 +1,6 @@
 import 'package:clients_manager/features/register/data/datasource/register_service.dart';
-import 'package:clients_manager/features/register/domain/entities/register_request.dart';
-import 'package:clients_manager/features/register/domain/entities/register_response.dart';
+import 'package:clients_manager/features/register/domain/data_transfer_objects/request_register_d_t_o.dart';
+import 'package:clients_manager/features/register/domain/data_transfer_objects/response_register_d_t_o.dart';
 import 'package:clients_manager/features/register/domain/repository/register_repository.dart';
 
 class RegisterRepositoryImpl implements RegisterRepository {
@@ -9,7 +9,7 @@ class RegisterRepositoryImpl implements RegisterRepository {
   RegisterRepositoryImpl({required this.registerService});
 
   @override
-  Future<RegisterResponse> register(RegisterRequest request) async {
+  Future<ResponseRegisterDTO> register(RequestRegisterDTO request) async {
     try {
       final response = await registerService.register(request);
 

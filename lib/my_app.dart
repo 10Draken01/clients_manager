@@ -23,13 +23,13 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(
               create: (_) => LoginProvider(
                   loginUseCase: injectionContainer.loginUsecase, 
-                  createLoginRequestUseCase: injectionContainer.createLoginRequestUseCase
+                  createRequestLoginUseCase: injectionContainer.createRequestLoginUseCase
                 )
             ),
             ChangeNotifierProvider(
               create: (_) => RegisterProvider(
                 registerUseCase: injectionContainer.registerUseCase, 
-                createRegisterRequestUseCase: injectionContainer.createRegisterRequestUseCase),
+                createRequestRegisterUseCase: injectionContainer.createRequestRegisterUseCase),
             )
           ],
           child: MaterialApp(

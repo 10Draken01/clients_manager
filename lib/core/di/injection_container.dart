@@ -3,12 +3,12 @@ import 'package:clients_manager/core/network/values_objects/api_data.dart';
 import 'package:clients_manager/features/login/data/datasource/login_service.dart';
 import 'package:clients_manager/features/login/data/repository/login_repository_impl.dart';
 import 'package:clients_manager/features/login/domain/repository/login_repository.dart';
-import 'package:clients_manager/features/login/domain/usecase/create_login_request_use_case.dart';
+import 'package:clients_manager/features/login/domain/usecase/create_request_login_use_case.dart';
 import 'package:clients_manager/features/login/domain/usecase/login_use_case.dart';
 import 'package:clients_manager/features/register/data/datasource/register_service.dart';
 import 'package:clients_manager/features/register/data/repository/register_repository_impl.dart';
 import 'package:clients_manager/features/register/domain/repository/register_repository.dart';
-import 'package:clients_manager/features/register/domain/usecase/create_register_request_use_case.dart';
+import 'package:clients_manager/features/register/domain/usecase/create_request_register_use_case.dart';
 import 'package:clients_manager/features/register/domain/usecase/register_use_case.dart';
 
 class InjectionContainer {
@@ -22,12 +22,12 @@ class InjectionContainer {
   late final LoginService loginService;
   late final LoginRepository loginRepository;
   late final LoginUseCase loginUsecase;
-  late final CreateLoginRequestUseCase createLoginRequestUseCase;
+  late final CreateRequestLoginUseCase createRequestLoginUseCase;
 
   late final RegisterService registerService;
   late final RegisterRepository registerRepository;
   late final RegisterUseCase registerUseCase;
-  late final CreateRegisterRequestUseCase createRegisterRequestUseCase;
+  late final CreateRequestRegisterUseCase createRequestRegisterUseCase;
 
   Future<void> init() async {
     httpService = HttpService(
@@ -38,13 +38,13 @@ class InjectionContainer {
     loginService = LoginService(httpService: httpService);
     loginRepository = LoginRepositoryImpl(loginService: loginService);
     loginUsecase = LoginUseCase(loginRepository: loginRepository);
-    createLoginRequestUseCase = CreateLoginRequestUseCase();
+    createRequestLoginUseCase = CreateRequestLoginUseCase();
 
     registerService = RegisterService(httpService: httpService);
     registerRepository = RegisterRepositoryImpl(
       registerService: registerService,
     );
     registerUseCase = RegisterUseCase(registerRepository: registerRepository);
-    createRegisterRequestUseCase = CreateRegisterRequestUseCase();
+    createRequestRegisterUseCase = CreateRequestRegisterUseCase();
   }
 }

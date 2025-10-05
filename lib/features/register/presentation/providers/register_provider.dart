@@ -1,16 +1,16 @@
-import 'package:clients_manager/features/register/domain/entities/register_request.dart';
-import 'package:clients_manager/features/register/domain/entities/register_response.dart';
-import 'package:clients_manager/features/register/domain/usecase/create_register_request_use_case.dart';
+import 'package:clients_manager/features/register/domain/data_transfer_objects/request_register_d_t_o.dart';
+import 'package:clients_manager/features/register/domain/data_transfer_objects/response_register_d_t_o.dart';
+import 'package:clients_manager/features/register/domain/usecase/create_request_register_use_case.dart';
 import 'package:clients_manager/features/register/domain/usecase/register_use_case.dart';
 import 'package:flutter/material.dart';
 
 class RegisterProvider with ChangeNotifier {
   final RegisterUseCase registerUseCase;
-  final CreateRegisterRequestUseCase createRegisterRequestUseCase;
+  final CreateRequestRegisterUseCase createRequestRegisterUseCase;
 
   RegisterProvider({
     required this.registerUseCase,
-    required this.createRegisterRequestUseCase,
+    required this.createRequestRegisterUseCase,
   });
 
   String? _username;
@@ -32,15 +32,18 @@ class RegisterProvider with ChangeNotifier {
   String? get message => _message;
 
   VoidCallback? onRegisterSuccess;
-  void Function(String error)? onregisterError;
 
   Future<void> _register() async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      RegisterRequest request = createRegisterRequestUseCase.call(_username, _email, _password);
-      RegisterResponse response = await registerUseCase.call(request);
+      RequestRegisterDTO request = createRequestRegisterUseCase.call(
+        _username,
+        _email,
+        _password,
+      );
+      ResponseRegisterDTO response = await registerUseCase.call(request);
       _message = response.message;
       _success = response.success;
       if (response.success) {
@@ -54,7 +57,6 @@ class RegisterProvider with ChangeNotifier {
       } else {
         _isLoading = false;
         notifyListeners();
-        
       }
     } catch (e) {
       _message = 'An error occurred: $e';

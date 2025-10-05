@@ -1,5 +1,5 @@
-import 'package:clients_manager/features/register/domain/entities/register_request.dart';
-import 'package:clients_manager/features/register/domain/entities/register_response.dart';
+import 'package:clients_manager/features/register/domain/data_transfer_objects/request_register_d_t_o.dart';
+import 'package:clients_manager/features/register/domain/data_transfer_objects/response_register_d_t_o.dart';
 import 'package:clients_manager/features/register/domain/repository/register_repository.dart';
 
 class RegisterUseCase {
@@ -7,7 +7,7 @@ class RegisterUseCase {
 
   RegisterUseCase({required this.registerRepository});
 
-  Future<RegisterResponse> call(RegisterRequest request) async {
+  Future<ResponseRegisterDTO> call(RequestRegisterDTO request) async {
     return await registerRepository.register(request);
   }
 }

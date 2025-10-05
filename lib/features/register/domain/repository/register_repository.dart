@@ -1,6 +1,6 @@
-import 'package:clients_manager/features/register/domain/entities/register_request.dart';
-import 'package:clients_manager/features/register/domain/entities/register_response.dart';
+import 'package:clients_manager/features/register/domain/data_transfer_objects/request_register_d_t_o.dart';
+import 'package:clients_manager/features/register/domain/data_transfer_objects/response_register_d_t_o.dart';
 
 abstract class RegisterRepository {
-  Future<RegisterResponse> register(RegisterRequest request);
+  Future<ResponseRegisterDTO> register(RequestRegisterDTO request);
 }

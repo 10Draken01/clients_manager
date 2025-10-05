@@ -1,0 +1,4 @@
+enum CharacterIconType {
+  number,
+  url
+}

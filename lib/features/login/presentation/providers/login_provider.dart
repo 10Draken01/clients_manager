@@ -1,16 +1,16 @@
-import 'package:clients_manager/features/login/domain/entities/login_request.dart';
-import 'package:clients_manager/features/login/domain/entities/login_response.dart';
-import 'package:clients_manager/features/login/domain/usecase/create_login_request_use_case.dart';
+import 'package:clients_manager/features/login/domain/data_transfer_objects/request_login_d_t_o.dart';
+import 'package:clients_manager/features/login/domain/data_transfer_objects/response_login_d_t_o.dart';
+import 'package:clients_manager/features/login/domain/usecase/create_request_login_use_case.dart';
 import 'package:clients_manager/features/login/domain/usecase/login_use_case.dart';
 import 'package:flutter/material.dart';
 
 class LoginProvider with ChangeNotifier {
   final LoginUseCase loginUseCase;
-  final CreateLoginRequestUseCase createLoginRequestUseCase;
+  final CreateRequestLoginUseCase createRequestLoginUseCase;
 
   LoginProvider({
     required this.loginUseCase,
-    required this.createLoginRequestUseCase,
+    required this.createRequestLoginUseCase,
   });
 
   String? _email;
@@ -36,13 +36,18 @@ class LoginProvider with ChangeNotifier {
   String? _message;
   String? get message => _message;
 
+  VoidCallback? onLoginSuccess;
+
   Future<void> _login() async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      LoginRequest request = createLoginRequestUseCase.call(_email, _password);
-      LoginResponse response = await loginUseCase.call(request);
+      RequestLoginDTO request = createRequestLoginUseCase.call(
+        _email,
+        _password,
+      );
+      ResponseLoginDTO response = await loginUseCase.call(request);
       _message = response.message;
       _success = response.success;
       if (response.success) {
@@ -50,6 +55,7 @@ class LoginProvider with ChangeNotifier {
           _message = null;
           notifyListeners();
         });
+        onLoginSuccess?.call();
       }
     } catch (e) {
       _message = 'An error occurred: $e';

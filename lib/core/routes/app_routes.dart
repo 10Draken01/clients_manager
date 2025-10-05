@@ -1,3 +1,4 @@
+import 'package:clients_manager/features/clients_display/presentation/pages/clients_display_screen.dart';
 import 'package:clients_manager/features/login/presentation/pages/login_screen.dart';
 import 'package:clients_manager/features/register/presentation/pages/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class AppRoutes {
   // 📍 Nombres de las rutas (constantes)
   static const String login = '/login';
   static const String register = '/register';
-  static const String home = '/home';
+  static const String clientsDisplay = '/clients_display';
   static const String profile = '/profile';
   // Agregar más rutas aquí...
 
@@ -18,7 +19,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     login: (context) => const LoginScreen(),
     register: (context) => const RegisterScreen(),
-    // home: (context) => const HomeScreen(),
+    clientsDisplay: (context) => const ClientsDisplayScreen()
     // profile: (context) => const ProfileScreen(),
   };
 
@@ -71,15 +72,5 @@ class AppRoutes {
     Navigator.pop<T>(context, result);
   }
 
-  /// 🏠 Método específico para ir al Home desde cualquier parte
-  /// Limpia todo el stack
-  static Future<void> goToHome(BuildContext context) {
-    return navigateAndRemoveUntil(context, home);
-  }
 
-  /// 🔐 Método específico para hacer logout
-  /// Limpia todo el stack y va al login
-  static Future<void> logout(BuildContext context) {
-    return navigateAndRemoveUntil(context, login);
-  }
 }

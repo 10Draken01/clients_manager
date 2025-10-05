@@ -6,8 +6,29 @@ import 'package:clients_manager/features/login/presentation/providers/login_prov
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // ✅ Configurar callbacks cuando se crea el widget
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<LoginProvider>();
+
+      // ✅ Cuando el login es exitoso
+      provider.onLoginSuccess = () {
+        if (mounted) {
+          AppRoutes.navigateTo(context, AppRoutes.clientsDisplay);
+        }
+      };
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +52,7 @@ class LoginScreen extends StatelessWidget {
                   color: colorScheme.primary,
                 ),
                 const SizedBox(height: 20),
-                
+
                 // 📝 Título con estilo del tema
                 Text(
                   'Bienvenido',
@@ -41,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                
+
                 // 📝 Subtítulo
                 Text(
                   'Inicia sesión para continuar',
@@ -50,7 +71,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 40),
-                
+
                 // 🎯 FORMULARIO con Consumer para optimizar
                 Consumer<LoginProvider>(
                   builder: (context, provider, child) {
@@ -62,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                       onSubmit: provider.handleLogin,
                       submitButtonText: 'Iniciar Sesión',
                       isLoading: provider.isLoading,
-                      
+
                       // 📢 Widget de mensaje adaptativo al tema
                       messageWidget: provider.message != null
                           ? MessageResponseForm(
@@ -74,9 +95,9 @@ class LoginScreen extends StatelessWidget {
                     );
                   },
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 // 🔗 Link de registro
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -115,5 +136,4 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-
 }
