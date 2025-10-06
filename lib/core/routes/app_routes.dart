@@ -1,3 +1,4 @@
+import 'package:clients_manager/features/client_form/presentation/page/client_form_screen.dart';
 import 'package:clients_manager/features/clients_display/presentation/pages/clients_display_screen.dart';
 import 'package:clients_manager/features/login/presentation/pages/login_screen.dart';
 import 'package:clients_manager/features/register/presentation/pages/register_screen.dart';
@@ -13,13 +14,15 @@ class AppRoutes {
   static const String register = '/register';
   static const String clientsDisplay = '/clients_display';
   static const String profile = '/profile';
+  static const String client_form = '/client_form';
   // Agregar más rutas aquí...
 
   /// 🗺️ Map con todas las rutas
   static Map<String, WidgetBuilder> routes = {
     login: (context) => const LoginScreen(),
     register: (context) => const RegisterScreen(),
-    clientsDisplay: (context) => const ClientsDisplayScreen()
+    clientsDisplay: (context) => const ClientsDisplayScreen(),
+    client_form: (context) => ClientFormScreen(),
     // profile: (context) => const ProfileScreen(),
   };
 
@@ -71,6 +74,4 @@ class AppRoutes {
   static void goBack<T extends Object?>(BuildContext context, [T? result]) {
     Navigator.pop<T>(context, result);
   }
-
-
 }

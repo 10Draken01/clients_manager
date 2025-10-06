@@ -1,10 +1,6 @@
-import 'package:clients_manager/core/domain/data_transfer_objects/request_get_page_clients_d_t_o.dart';
+import 'package:clients_manager/features/clients_display/domain/data_transfer_objects/get_page_clients/request_get_page_clients_d_t_o.dart';
 
 class CreateRequestGetPageClientsUseCase {
-  final int page;
-
-  CreateRequestGetPageClientsUseCase({required this.page});
-
   RequestGetPageClientsDTO call(int? page) {
 
     if(page == null) {

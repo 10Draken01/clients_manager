@@ -1,4 +1,5 @@
 enum CharacterIconType {
   number,
-  url
+  url,
+  local
 }

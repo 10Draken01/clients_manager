@@ -8,12 +8,11 @@ class ApiData {
   static const String register = '/users/register';
 
   // Clientes
-  static const String getClient = '/clientes';
-  static const String getPageClients = '/page/:page';
-  static const String addClient = '/clientes';
-  static const String updateClient = '/:claveCliente';
-  static const String deleteClient =
-      '/:claveCliente'; // Requiere ID del cliente
+  static const String getClient = '/clients';
+  static const String getPageClients = '/clients/page/:page';
+  static const String createClient = '/clients';
+  static const String updateClient = '/clients/:claveCliente';
+  static const String deleteClient = '/clients/:claveCliente'; // Requiere ID del cliente
 
   static const String tokenApiClients = 'clientsManager';
 }

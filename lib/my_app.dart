@@ -3,6 +3,7 @@ import 'package:clients_manager/core/di/injection_container.dart';
 import 'package:clients_manager/core/network/http_service.dart';
 import 'package:clients_manager/core/routes/app_routes.dart';
 import 'package:clients_manager/core/theme/app_theme.dart';
+import 'package:clients_manager/features/clients_display/presentation/providers/clients_display_provider.dart';
 import 'package:clients_manager/features/login/presentation/providers/login_provider.dart';
 import 'package:clients_manager/features/register/presentation/providers/register_provider.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,14 @@ class MyApp extends StatelessWidget {
               create: (_) => RegisterProvider(
                 registerUseCase: injectionContainer.registerUseCase, 
                 createRequestRegisterUseCase: injectionContainer.createRequestRegisterUseCase),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => ClientsDisplayProvider(
+                getPageClientsUseCase: injectionContainer.getPageClientsUseCase,
+                createRequestGetPageClientsUseCase: injectionContainer.createRequestGetPageClientsUseCase,
+                deleteClientUseCase: injectionContainer.deleteClientUseCase,
+                createRequestDeleteClientUseCase: injectionContainer.createRequestDeleteClientUseCase
+              ),
             )
           ],
           child: MaterialApp(

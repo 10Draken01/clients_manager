@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:clients_manager/core/network/http_service.dart';
 import 'package:clients_manager/core/network/values_objects/api_data.dart';
 import 'package:clients_manager/core/data/models/response_get_page_clients_model.dart';
-import 'package:clients_manager/core/domain/data_transfer_objects/request_get_page_clients_d_t_o.dart';
+import 'package:clients_manager/features/clients_display/domain/data_transfer_objects/get_page_clients/request_get_page_clients_d_t_o.dart';
 
 class GetPageClientsService {
   final HttpService httpService;
@@ -18,11 +18,11 @@ class GetPageClientsService {
         ApiData.getPageClients.replaceFirst(':page', request.page.toString()),
         headers: {'Authorization': ApiData.tokenApiClients},
       );
-
       final jsonData = jsonDecode(response.body);
-
-      return ResponseGetPageClientsModel.fromJson(jsonData);
+      final r = ResponseGetPageClientsModel.fromJson(jsonData);
+      return r;
     } catch (e) {
+      print('Error en GetPageClientsService: $e');
       return ResponseGetPageClientsModel(
         success: false,
         message: e.toString(),

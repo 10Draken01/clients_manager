@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:http/http.dart' as http;
 
 class HttpService {
@@ -28,7 +27,8 @@ class HttpService {
     return headers;
   }
 
-  void saveToken(String tokenName, String token) {
+  void _saveToken(String tokenName, String token) {
+    print('Guardando token: $tokenName -> $token');
     _tokens[tokenName] = token;
   }
 
@@ -74,9 +74,9 @@ class HttpService {
           .timeout(timeOut);
 
       if (tokenName != null) {
-        final authorizationValue = response.headers['Authorization'];
+        final authorizationValue = response.headers['authorization'];
         if (authorizationValue != null) {
-          _tokens[tokenName] = authorizationValue.split('Bearer ').last;
+          _saveToken(tokenName, authorizationValue.split('Bearer ').last);
         }
       }
 
