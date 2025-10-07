@@ -1,8 +1,9 @@
 import 'package:clients_manager/core/domain/entities/client_entity.dart';
 import 'package:clients_manager/core/domain/values_objects/character_icons_images.dart';
 import 'package:clients_manager/core/routes/app_routes.dart';
-import 'package:clients_manager/features/client_form/presentation/page/client_form_screen.dart';
 import 'package:clients_manager/features/clients_display/presentation/providers/clients_display_provider.dart';
+import 'package:clients_manager/features/clients_display/presentation/widgets/atoms/client_avatar.dart';
+import 'package:clients_manager/features/clients_display/presentation/widgets/molecules/client_info_row.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/molecules/delete_confirmation_dialog.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/organims/clients_content.dart';
 import 'package:flutter/material.dart';
@@ -110,7 +111,78 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
 
   void _onClientTap(ClientEntity client) {
     HapticFeedback.selectionClick();
-    _navigateToEditClient(client);
+    print('CLIENTE TAPPED: ${client.claveCliente} - ${client.nombre}');
+    // ventana emergente con detalles del cliente
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            ClientAvatar(
+              imageUrl: client.characterIcon.url,
+              assetPath: client.characterIcon.iconId != null
+                  ? CharacterIconsImages.listIcons[client.characterIcon.iconId!]
+                  : null,
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: Text(client.nombre)),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClientInfoRow(
+                icon: Icons.badge_outlined,
+                label: "Clave de Cliente:",
+                value: client.claveCliente,
+              ),
+              ClientInfoRow(
+                icon: Icons.person_outline,
+                label: "Nombre:",
+                value: client.nombre,
+              ),
+              ClientInfoRow(
+                icon: Icons.email_outlined,
+                label: "Email:",
+                value: client.email,
+              ),
+              ClientInfoRow(
+                icon: Icons.phone_outlined,
+                label: "Teléfono:",
+                value: client.celular,
+              ),
+              ClientInfoRow(
+                icon: Icons.calendar_today_outlined,
+                label: "Fecha de Creación:",
+                value: _formatDateTime(client.createdAt.toString()),
+              ),
+              ClientInfoRow(
+                icon: Icons.update_outlined,
+                label: "Fecha de Actualización:",
+                value: _formatDateTime(client.updatedAt.toString()),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cerrar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // funcion para darle formato a dateTime
+  String _formatDateTime(String dateTimeStr) {
+    try {
+      final dateTime = DateTime.parse(dateTimeStr);
+      return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
+    } catch (e) {
+      return dateTimeStr; // Retorna el string original si hay un error
+    }
   }
 
   void _onClientDelete(ClientEntity client) {
@@ -125,10 +197,9 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
   }
 
   void _deleteClient(ClientEntity client) {
-    
     print('ELIMINAR CLIENTE: ${client.claveCliente} - ${client.nombre}');
     context.read<ClientsDisplayProvider>().deleteClient(client.claveCliente);
-    
+
     _showSuccessSnackBar('Cliente eliminado exitosamente');
   }
 
@@ -143,8 +214,11 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
   }
 
   Future<void> _navigateToEditClient(ClientEntity client) async {
-    
-    final result = await AppRoutes.navigateTo(context, AppRoutes.client_form, arguments: {'clientToEdit': client});
+    final result = await AppRoutes.navigateTo(
+      context,
+      AppRoutes.client_form,
+      arguments: {'clientToEdit': client},
+    );
 
     if (result == true && mounted) {
       _refreshClients();
