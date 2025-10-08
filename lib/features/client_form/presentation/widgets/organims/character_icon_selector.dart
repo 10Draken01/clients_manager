@@ -73,6 +73,7 @@ class _CharacterIconSelectorState extends State<CharacterIconSelector> {
         widget.onSelectionChanged(null, _selectedImageFile);
       }
     } catch (e) {
+      print('Error picking image from gallery: $e');
       _showErrorSnackBar('Error al seleccionar imagen: $e');
     }
   }
@@ -82,7 +83,7 @@ class _CharacterIconSelectorState extends State<CharacterIconSelector> {
       _selectedIconIndex = index;
       _selectedImageFile = null;
     });
-    widget.onSelectionChanged(index, null);
+    widget.onSelectionChanged(index, null); // Pasa el índice, no null
   }
 
   void _removeSelectedImage() {
@@ -143,10 +144,7 @@ class _CharacterIconSelectorState extends State<CharacterIconSelector> {
         // Selector de fuente de imagen
         const Text(
           'O selecciona una imagen personalizada:',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 12),
         ImageSourceSelector(

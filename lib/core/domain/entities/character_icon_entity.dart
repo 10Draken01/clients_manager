@@ -1,45 +1,99 @@
+import 'dart:io';
+
 import 'package:clients_manager/core/domain/values_objects/character_icon_types.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CharacterIconEntity {
-  CharacterIconType type;
-  int? iconId;
-  String? id;
-  String? url;
-  XFile? image;
+  final CharacterIconType type;
+  final int? iconId;
+  final String? id;
+  final String? url;
+  final File? file;
 
-  CharacterIconEntity({
-    this.type = CharacterIconType.number,
-    this.iconId = 0,
+  CharacterIconEntity._({
+    required this.type,
+    this.iconId,
     this.id,
     this.url,
-    this.image,
+    this.file,
   });
 
-  void setIconId(int? iconId) {
-    if (iconId == null) {
-      throw Exception('iconId cannot be null.');
-    }
+  // Constructor para ícono por número (0-9)
+  factory CharacterIconEntity.fromNumber(int iconId) {
     if (iconId < 0 || iconId > 9) {
-      throw Exception('iconId must be between 0 and 9.');
+      throw Exception('iconId must be between 0 and 9, got: $iconId');
     }
-    type = CharacterIconType.number;
-    this.iconId = iconId;
+    return CharacterIconEntity._(
+      type: CharacterIconType.number,
+      iconId: iconId,
+    );
   }
 
-  void setUrl(String? url) {
-    if (url == null || url.isEmpty) {
-      throw Exception('url cannot be null or empty.');
+  // Constructor para ícono desde URL
+  factory CharacterIconEntity.fromUrl({
+    required String url,
+    String? id,
+  }) {
+    if (url.isEmpty) {
+      throw Exception('url cannot be empty');
     }
-    this.type = CharacterIconType.url;
-    this.url = url;
+    return CharacterIconEntity._(
+      type: CharacterIconType.url,
+      id: id,
+      url: url,
+    );
   }
 
-  void setImage(XFile? image) {
-    if (image == null) {
-      throw Exception('image cannot be null.');
+  // Constructor para ícono desde archivo local
+  factory CharacterIconEntity.fromFile(File file) {
+    return CharacterIconEntity._(
+      type: CharacterIconType.file,
+      file: file,
+    );
+  }
+
+  // Constructor inteligente que decide automáticamente el tipo
+  factory CharacterIconEntity.create({
+    int? iconId,
+    String? id,
+    String? url,
+    File? file,
+  }) {
+    // Prioridad: file > url > iconId
+    if (file != null) {
+      return CharacterIconEntity.fromFile(file);
     }
-    this.type = CharacterIconType.local;
-    this.image = image;
+    
+    if (url != null && url.isNotEmpty) {
+      return CharacterIconEntity.fromUrl(url: url, id: id);
+    }
+    
+    if (iconId != null) {
+      return CharacterIconEntity.fromNumber(iconId);
+    }
+    
+    // Si no hay nada, retornar ícono por defecto
+    return CharacterIconEntity.fromNumber(0);
+  }
+
+  // Método para copiar con cambios
+  CharacterIconEntity copyWith({
+    CharacterIconType? type,
+    int? iconId,
+    String? id,
+    String? url,
+    File? file,
+  }) {
+    return CharacterIconEntity._(
+      type: type ?? this.type,
+      iconId: iconId ?? this.iconId,
+      id: id ?? this.id,
+      url: url ?? this.url,
+      file: file ?? this.file,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'CharacterIconEntity(type: $type, iconId: $iconId, id: $id, url: $url, file: ${file?.path})';
   }
 }

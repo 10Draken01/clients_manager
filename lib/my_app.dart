@@ -1,8 +1,9 @@
-
 import 'package:clients_manager/core/di/injection_container.dart';
 import 'package:clients_manager/core/network/http_service.dart';
 import 'package:clients_manager/core/routes/app_routes.dart';
 import 'package:clients_manager/core/theme/app_theme.dart';
+import 'package:clients_manager/features/client_form/presentation/page/client_form_screen.dart';
+import 'package:clients_manager/features/client_form/presentation/provider/client_form_provider.dart';
 import 'package:clients_manager/features/clients_display/presentation/providers/clients_display_provider.dart';
 import 'package:clients_manager/features/login/presentation/providers/login_provider.dart';
 import 'package:clients_manager/features/register/presentation/providers/register_provider.dart';
@@ -38,6 +39,12 @@ class MyApp extends StatelessWidget {
                 createRequestGetPageClientsUseCase: injectionContainer.createRequestGetPageClientsUseCase,
                 deleteClientUseCase: injectionContainer.deleteClientUseCase,
                 createRequestDeleteClientUseCase: injectionContainer.createRequestDeleteClientUseCase
+              ),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => ClientFormProvider(
+                createClientUseCase: injectionContainer.createClientUseCase,
+                createRequestCreateClientUseCase: injectionContainer.createRequestCreateClientUseCase
               ),
             )
           ],

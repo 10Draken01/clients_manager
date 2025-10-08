@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:mime/mime.dart'; // Añade esta dependencia
+import 'package:http_parser/http_parser.dart'; // Añade esta dependencia
 
 class HttpService {
   final String baseURL;
@@ -18,8 +20,10 @@ class HttpService {
     if (additionalHeaders != null) {
       final authorizationValue = additionalHeaders['Authorization'];
       if (authorizationValue != null) {
-        additionalHeaders['Authorization'] =
-            'Bearer ${_getToken(authorizationValue)}';
+        final formatToken = 'Bearer ${_getToken(authorizationValue)}';
+        print('token name: $authorizationValue');
+        print('formatted token: $formatToken');
+        additionalHeaders['Authorization'] = formatToken;
       }
       headers.addAll(additionalHeaders);
     }
@@ -91,7 +95,7 @@ class HttpService {
     Map<String, String>? headers,
     Map<String, String>? fields,
     Map<String, File>? files,
-  }) async => _multipartRequest('POST', endpoint, fields: fields, files: files);
+  }) async => _multipartRequest('POST', endpoint, headers: headers, fields: fields, files: files);
 
   Future<http.Response> put(
     String endpoint, {
@@ -100,7 +104,6 @@ class HttpService {
   }) async {
     try {
       final uri = Uri.parse('$baseURL$endpoint');
-
       final response = await http.put(
         uri,
         headers: _getHeaders(additionalHeaders: headers),
@@ -118,7 +121,7 @@ class HttpService {
     Map<String, String>? headers,
     Map<String, String>? fields,
     Map<String, File>? files,
-  }) async => _multipartRequest('PUT', endpoint, fields: fields, files: files);
+  }) async => _multipartRequest('PUT', endpoint, headers: headers, fields: fields, files: files);
 
   Future<http.Response> delete(
     String endpoint, {
@@ -155,32 +158,75 @@ class HttpService {
       final uri = Uri.parse('$baseURL$endpoint');
 
       final request = http.MultipartRequest(method, uri);
-
+      
+      // Agregar headers (sin Content-Type para multipart)
       if (headers != null) {
-        request.headers.addAll(headers);
+        final customHeaders = Map<String, String>.from(headers);
+        
+        // Formatear token si existe
+        final authorizationValue = customHeaders['Authorization'];
+        if (authorizationValue != null) {
+          final token = _getToken(authorizationValue);
+          if (token != null) {
+            customHeaders['Authorization'] = 'Bearer $token';
+          }
+        }
+        
+        request.headers.addAll(customHeaders);
       }
 
+      // Agregar archivos con contentType correcto
       if (files != null) {
         for (var entry in files.entries) {
           final file = entry.value;
           final fieldName = entry.key;
-
+          final filePath = file.path;
+          
+          // Detectar el MIME type del archivo
+          final mimeType = lookupMimeType(filePath);
+          
+          print('📎 Agregando archivo:');
+          print('  - Campo: $fieldName');
+          print('  - Path: $filePath');
+          print('  - MIME Type: $mimeType');
+          
+          if (mimeType == null) {
+            throw Exception('No se pudo determinar el tipo MIME del archivo: $filePath');
+          }
+          
+          // Separar el MIME type en tipo y subtipo
+          final mimeTypeParts = mimeType.split('/');
+          
           request.files.add(
             await http.MultipartFile.fromPath(
               fieldName,
-              file.path,
-              filename: file.path.split('/').last,
+              filePath,
+              filename: filePath.split('/').last,
+              contentType: MediaType(mimeTypeParts[0], mimeTypeParts[1]),
             ),
           );
         }
       }
+      
+      // Agregar campos
+      if (fields != null) {
+        print('📝 Campos form-data: $fields');
+        request.fields.addAll(fields);
+      }
 
+      print('🚀 Enviando petición $method a: $uri');
+      
       final streamedResponse = await request.send().timeout(timeOut);
 
       final response = await http.Response.fromStream(streamedResponse);
+      
+      print('📥 Respuesta recibida:');
+      print('  - Status: ${response.statusCode}');
+      print('  - Body: ${response.body}');
 
       return response;
     } catch (e) {
+      print('❌ Error en petición $method FormData: $e');
       throw Exception('Ocurrio un error en la peticion $method FormData: $e');
     }
   }

@@ -1,18 +1,16 @@
 import 'dart:io';
 import 'package:clients_manager/core/domain/entities/client_entity.dart';
-import 'package:clients_manager/core/domain/values_objects/character_icons_images.dart';
+import 'package:clients_manager/features/client_form/presentation/provider/client_form_provider.dart';
 import 'package:clients_manager/features/client_form/presentation/widgets/organims/character_icon_selector.dart';
 import 'package:clients_manager/features/client_form/presentation/widgets/organims/client_form_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class ClientFormScreen extends StatefulWidget {
   final ClientEntity? clientToEdit;
 
-  const ClientFormScreen({
-    super.key,
-    this.clientToEdit,
-  });
+  const ClientFormScreen({super.key, this.clientToEdit});
 
   @override
   State<ClientFormScreen> createState() => _ClientFormScreenState();
@@ -21,19 +19,9 @@ class ClientFormScreen extends StatefulWidget {
 class _ClientFormScreenState extends State<ClientFormScreen>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
-  
-  late TextEditingController _claveController;
-  late TextEditingController _nombreController;
-  late TextEditingController _celularController;
-  late TextEditingController _emailController;
-
-  int? _selectedIconIndex;
-  File? _selectedImageFile;
 
   late AnimationController _fabController;
   late Animation<double> _fabAnimation;
-
-  bool get _isEditing => widget.clientToEdit != null;
 
   @override
   void initState() {
@@ -43,25 +31,31 @@ class _ClientFormScreenState extends State<ClientFormScreen>
   }
 
   void _initializeControllers() {
-    if (_isEditing) {
+    final provider = context.read<ClientFormProvider>();
+
+    provider.isEditing = widget.clientToEdit != null;
+
+    if (provider.isEditing) {
       final client = widget.clientToEdit!;
-      _claveController = TextEditingController(text: client.claveCliente);
-      _nombreController = TextEditingController(text: client.nombre);
-      _celularController = TextEditingController(text: client.celular);
-      _emailController = TextEditingController(text: client.email);
-      
-      // Inicializar ícono
-      if (client.characterIcon.iconId != null) {
-        _selectedIconIndex = client.characterIcon.iconId;
-      } else {
-        _selectedIconIndex = 0; // Por defecto si viene de URL
-      }
+      provider.claveController = TextEditingController(
+        text: client.claveCliente,
+      );
+      provider.nombreController = TextEditingController(text: client.nombre);
+      provider.celularController = TextEditingController(text: client.celular);
+      provider.emailController = TextEditingController(text: client.email);
+
+      // Usar el método dedicado para actualizar ícono
+      provider.updateIconSelection(
+        iconIndex: client.characterIcon.iconId ?? 0,
+        imageFile: null,
+      );
     } else {
-      _claveController = TextEditingController();
-      _nombreController = TextEditingController();
-      _celularController = TextEditingController();
-      _emailController = TextEditingController();
-      _selectedIconIndex = 0; // Primer ícono por defecto
+      provider.claveController = TextEditingController();
+      provider.nombreController = TextEditingController();
+      provider.celularController = TextEditingController();
+      provider.emailController = TextEditingController();
+
+      provider.updateIconSelection(iconIndex: 0, imageFile: null);
     }
   }
 
@@ -78,10 +72,8 @@ class _ClientFormScreenState extends State<ClientFormScreen>
   }
 
   void _onIconSelectionChanged(int? iconIndex, File? imageFile) {
-    setState(() {
-      _selectedIconIndex = iconIndex;
-      _selectedImageFile = imageFile;
-    });
+    final provider = context.read<ClientFormProvider>();
+    provider.updateIconSelection(iconIndex: iconIndex, imageFile: imageFile);
   }
 
   Future<void> _saveClient() async {
@@ -92,34 +84,27 @@ class _ClientFormScreenState extends State<ClientFormScreen>
 
     HapticFeedback.mediumImpact();
 
-    // Aquí obtienes los datos del formulario
-    final clientData = {
-      'claveCliente': _claveController.text.trim(),
-      'nombre': _nombreController.text.trim(),
-      'celular': _celularController.text.trim(),
-      'email': _emailController.text.trim(),
-      'iconId': _selectedIconIndex,
-      'imageFile': _selectedImageFile,
-    };
-
-    // TODO: Llama al método del provider para crear o editar
-    if (_isEditing) {
-      // provider.updateClient(widget.clientToEdit!.id, clientData);
-      print('EDITAR CLIENTE: $clientData');
+    final provider = context.read<ClientFormProvider>();
+    if (provider.isEditing) {
+      // TODO: Implementar updateClient
+      // success = await provider.updateClient(widget.clientToEdit!.id);
     } else {
-      // provider.createClient(clientData);
-      print('CREAR CLIENTE: $clientData');
+      print('Crear cliente');
+      await provider.createClient();
     }
 
-    // Muestra mensaje de éxito y regresa
-    _showSuccessSnackBar(
-      _isEditing 
-        ? 'Cliente actualizado exitosamente' 
-        : 'Cliente creado exitosamente'
-    );
-    
-    await Future.delayed(const Duration(milliseconds: 500));
-    if (mounted) Navigator.pop(context, true);
+    if (!mounted) return;
+
+    if (provider.success) {
+      _showSuccessSnackBar(
+        provider.message ?? (provider.isEditing ? 'Cliente actualizado' : 'Cliente creado'),
+      );
+
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (mounted) Navigator.pop(context, true);
+    } else {
+      _showErrorSnackBar(provider.message ?? 'Error al guardar el cliente');
+    }
   }
 
   void _showSuccessSnackBar(String message) {
@@ -164,10 +149,11 @@ class _ClientFormScreenState extends State<ClientFormScreen>
 
   @override
   void dispose() {
-    _claveController.dispose();
-    _nombreController.dispose();
-    _celularController.dispose();
-    _emailController.dispose();
+    final provider = context.read<ClientFormProvider>();
+    provider.claveController.dispose();
+    provider.nombreController.dispose();
+    provider.celularController.dispose();
+    provider.emailController.dispose();
     _fabController.dispose();
     super.dispose();
   }
@@ -175,10 +161,11 @@ class _ClientFormScreenState extends State<ClientFormScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final provider = context.watch<ClientFormProvider>();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isEditing ? 'Editar Cliente' : 'Nuevo Cliente'),
+        title: Text(provider.isEditing ? 'Editar Cliente' : 'Nuevo Cliente'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -192,19 +179,19 @@ class _ClientFormScreenState extends State<ClientFormScreen>
           children: [
             // Campos del formulario
             ClientFormFields(
-              claveController: _claveController,
-              nombreController: _nombreController,
-              celularController: _celularController,
-              emailController: _emailController,
-              isEditing: _isEditing,
+              claveController: provider.claveController,
+              nombreController: provider.nombreController,
+              celularController: provider.celularController,
+              emailController: provider.emailController,
+              isEditing: provider.isEditing,
             ),
 
             const SizedBox(height: 32),
 
             // Selector de ícono
             CharacterIconSelector(
-              initialIconIndex: _selectedIconIndex ?? 0,
-              initialImageFile: _selectedImageFile,
+              initialIconIndex: provider.selectedIconIndex ?? 0,
+              initialImageFile: provider.selectedImageFile,
               onSelectionChanged: _onIconSelectionChanged,
             ),
 
@@ -216,8 +203,8 @@ class _ClientFormScreenState extends State<ClientFormScreen>
         scale: _fabAnimation,
         child: FloatingActionButton.extended(
           onPressed: _saveClient,
-          icon: Icon(_isEditing ? Icons.save : Icons.add),
-          label: Text(_isEditing ? 'Guardar' : 'Crear Cliente'),
+          icon: Icon(provider.isEditing ? Icons.save : Icons.add),
+          label: Text(provider.isEditing ? 'Guardar' : 'Crear Cliente'),
           elevation: 4,
           backgroundColor: theme.colorScheme.primary,
           foregroundColor: Colors.white,

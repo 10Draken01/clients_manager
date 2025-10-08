@@ -15,41 +15,67 @@ class CreateClientService {
     RequestCreateClientDTO request,
   ) async {
     try {
-      late final fields;
-      late final files;
+      // Campos comunes para todos los casos
+      final fields = {
+        'claveCliente': request.client.claveCliente,
+        'nombre': request.client.nombre,
+        'celular': request.client.celular,
+        'email': request.client.email,
+      };
 
+      Map<String, File>? files;
+
+      // Determinar si se envía iconId o archivo
       if (request.client.characterIcon.iconId != null) {
-        fields = {
-          'claveCliente': request.client.claveCliente,
-          'nombre': request.client.nombre,
-          'celular': request.client.celular,
-          'email': request.client.email,
-          'characterIcon': request.client.characterIcon.iconId.toString(),
+        // Caso 1: Ícono predeterminado (número 0-9)
+        fields['characterIcon'] = request.client.characterIcon.iconId.toString();
+      } else if (request.client.characterIcon.file != null) {
+        // Caso 2: Imagen personalizada (archivo)
+        files = {
+          'characterIcon': request.client.characterIcon.file!,
         };
       } else {
-        fields = {
-          'claveCliente': request.client.claveCliente,
-          'nombre': request.client.nombre,
-          'celular': request.client.celular,
-          'email': request.client.email,
-        };
-        files = {
-          'characterIcon': File(request.client.characterIcon.image!.path),
-        };
+        // Caso 3: Fallback - usar ícono 0 por defecto
+        fields['characterIcon'] = '0';
       }
-        // estraer el archivo del path
+      print('fields: $fields');
+      print('files: $files');
 
+      // Realizar petición
       final response = await httpService.postFormData(
         ApiData.createClient,
         headers: {'Authorization': ApiData.tokenApiClients},
         fields: fields,
         files: files,
       );
-      final jsonData = jsonDecode(response.body);
-      return ResponseCreateClientModel.fromJson(jsonData);
+
+      // Validar respuesta
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final jsonData = jsonDecode(response.body);
+        return ResponseCreateClientModel.fromJson(jsonData);
+      } else {
+        final jsonData = jsonDecode(response.body);
+        return ResponseCreateClientModel(
+          success: false,
+          message: 'Error del servidor: ${jsonData['message'] ?? response.body}',
+        );
+      }
+    } on SocketException {
+      return ResponseCreateClientModel(
+        success: false,
+        message: 'No hay conexión a internet',
+      );
+    } on FormatException {
+      return ResponseCreateClientModel(
+        success: false,
+        message: 'Error al procesar la respuesta del servidor',
+      );
     } catch (e) {
       print('Error en CreateClientService: $e');
-      return ResponseCreateClientModel(success: false, message: e.toString());
+      return ResponseCreateClientModel(
+        success: false,
+        message: 'Error inesperado: ${e.toString()}',
+      );
     }
   }
 }

@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 class ClientAvatar extends StatelessWidget {
   final String? imageUrl;
   final String? assetPath;
-  final File? localImage; // Nuevo parámetro
+  final File? localImage;
   final double size;
   final bool showBorder;
   final bool isAnimated;
@@ -14,7 +14,7 @@ class ClientAvatar extends StatelessWidget {
     super.key,
     this.imageUrl,
     this.assetPath,
-    this.localImage, // Nuevo parámetro
+    this.localImage,
     this.size = 56.0,
     this.showBorder = true,
     this.isAnimated = true,
@@ -24,7 +24,6 @@ class ClientAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final borderWidth = size * 0.05;
-    final paddingSize = size * 0.1;
 
     final avatar = Container(
       width: size,
@@ -47,10 +46,7 @@ class ClientAvatar extends StatelessWidget {
         ],
       ),
       child: ClipOval(
-        child: Padding(
-          padding: EdgeInsets.all(paddingSize),
-          child: _buildImage(theme),
-        ),
+        child: _buildImage(theme), // Eliminado el Padding
       ),
     );
 
@@ -67,6 +63,8 @@ class ClientAvatar extends StatelessWidget {
       return Image.file(
         localImage!,
         fit: BoxFit.cover,
+        width: size,
+        height: size,
         errorBuilder: (context, error, stackTrace) => Icon(
           Icons.person,
           size: size * 0.5,
@@ -79,6 +77,8 @@ class ClientAvatar extends StatelessWidget {
       return CachedNetworkImage(
         imageUrl: imageUrl!,
         fit: BoxFit.cover,
+        width: size,
+        height: size,
         placeholder: (context, url) => Center(
           child: SizedBox(
             width: size * 0.4,
@@ -101,6 +101,8 @@ class ClientAvatar extends StatelessWidget {
       return Image.asset(
         assetPath!,
         fit: BoxFit.cover,
+        width: size,
+        height: size,
         color: theme.colorScheme.primary,
         colorBlendMode: BlendMode.srcIn,
         errorBuilder: (context, error, stackTrace) => Icon(

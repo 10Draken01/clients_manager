@@ -19,5 +19,5 @@ class ClientEntity {
     CharacterIconEntity? characterIcon,
     this.createdAt,
     this.updatedAt,
-  }) : characterIcon = characterIcon ?? CharacterIconEntity();
+  }) : characterIcon = characterIcon ?? CharacterIconEntity.create();
 }
