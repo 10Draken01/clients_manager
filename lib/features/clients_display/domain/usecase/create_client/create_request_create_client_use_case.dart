@@ -4,21 +4,21 @@ import 'package:clients_manager/core/domain/entities/client_entity.dart';
 
 class CreateRequestCreateClientUseCase {
   RequestCreateClientDTO call(
-    String? claveCliente,
-    String? nombre,
-    String? celular,
+    String? clientKey,
+    String? name,
+    String? phone,
     String? email,
     CharacterIconEntity? characterIcon,
   ) {
 
-    if(claveCliente == null || nombre == null || celular == null || email == null || characterIcon == null) {
+    if(clientKey == null || name == null || phone == null || email == null || characterIcon == null) {
       throw Exception('All client fields must be provided');
     }
     final client = ClientEntity(
       id: '',
-      claveCliente: claveCliente,
-      nombre: nombre,
-      celular: celular,
+      clientKey: clientKey,
+      name: name,
+      phone: phone,
       email: email,
       characterIcon: characterIcon,
       createdAt: DateTime.now(),

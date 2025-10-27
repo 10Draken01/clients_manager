@@ -159,7 +159,7 @@ class _ClientCardState extends State<ClientCard>
                         children: [
                           // Nombre con animación
                           AnimatedClientName(
-                            name: widget.client.nombre,
+                            name: widget.client.name,
                             animationDelay: widget.index * 50,
                           ),
                           const SizedBox(height: 8),
@@ -171,7 +171,7 @@ class _ClientCardState extends State<ClientCard>
                             children: [
                               InfoChip(
                                 icon: Icons.phone,
-                                text: widget.client.celular,
+                                text: widget.client.phone,
                                 color: theme.colorScheme.primary,
                               ),
                               InfoChip(
@@ -185,7 +185,7 @@ class _ClientCardState extends State<ClientCard>
 
                           // Clave del cliente
                           Text(
-                            'Clave: ${widget.client.claveCliente}',
+                            'Clave: ${widget.client.clientKey}',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurface.withOpacity(0.6),
                               fontWeight: FontWeight.w500,

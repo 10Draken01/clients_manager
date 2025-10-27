@@ -158,7 +158,7 @@ class _GridClientCardState extends State<_GridClientCard>
                   ),
                   const SizedBox(height: 12),
                   AnimatedClientName(
-                    name: widget.client.nombre,
+                    name: widget.client.name,
                     animationDelay: widget.index * 30,
                   ),
                   const SizedBox(height: 6),
@@ -173,7 +173,7 @@ class _GridClientCardState extends State<_GridClientCard>
                       const SizedBox(width: 4),
                       Flexible(
                         child: Text(
-                          widget.client.celular,
+                          widget.client.phone,
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurface.withOpacity(0.7),
                           ),

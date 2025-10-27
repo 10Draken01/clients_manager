@@ -2,9 +2,9 @@ import 'package:clients_manager/core/domain/entities/character_icon_entity.dart'
 
 class ClientEntity {
   final String? id;
-  final String claveCliente;
-  final String nombre;
-  final String celular;
+  final String clientKey;
+  final String name;
+  final String phone;
   final String email;
   CharacterIconEntity characterIcon;
   final DateTime? createdAt;
@@ -12,9 +12,9 @@ class ClientEntity {
 
   ClientEntity({
     this.id,
-    required this.claveCliente,
-    required this.nombre,
-    required this.celular,
+    required this.clientKey,
+    required this.name,
+    required this.phone,
     required this.email,
     CharacterIconEntity? characterIcon,
     this.createdAt,

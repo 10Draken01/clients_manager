@@ -5,9 +5,9 @@ import 'package:clients_manager/core/domain/entities/client_entity.dart';
 
 class ClientModel extends ClientEntity {
   final String id;
-  final String claveCliente;
-  final String nombre;
-  final String celular;
+  final String clientKey;
+  final String name;
+  final String phone;
   final String email;
   final CharacterIconEntity characterIcon;
   final DateTime createdAt;
@@ -15,18 +15,18 @@ class ClientModel extends ClientEntity {
 
   ClientModel({
     required this.id,
-    required this.claveCliente,
-    required this.nombre,
-    required this.celular,
+    required this.clientKey,
+    required this.name,
+    required this.phone,
     required this.email,
     required this.characterIcon,
     required this.createdAt,
     required this.updatedAt,
   }): super(
     id: id,
-    claveCliente: claveCliente,
-    nombre: nombre,
-    celular: celular,
+    clientKey: clientKey,
+    name: name,
+    phone: phone,
     email: email,
     characterIcon: characterIcon,
     createdAt: createdAt,
@@ -36,9 +36,9 @@ class ClientModel extends ClientEntity {
   factory ClientModel.fromJson(Map<String, dynamic> json) {
     return ClientModel(
       id: json['_id'],
-      claveCliente: json['claveCliente'],
-      nombre: json['nombre'],
-      celular: json['celular'],
+      clientKey: json['clientKey'],
+      name: json['name'],
+      phone: json['phone'],
       email: json['email'],
       characterIcon: CharacterIconModel.fromDynamic(json['characterIcon']).toEntity(),
       createdAt: DateTime.parse(json['createdAt']),
@@ -49,9 +49,9 @@ class ClientModel extends ClientEntity {
   ClientEntity toEntity() {
     return ClientEntity(
       id: id,
-      claveCliente: claveCliente,
-      nombre: nombre,
-      celular: celular,
+      clientKey: clientKey,
+      name: name,
+      phone: phone,
       email: email,
       characterIcon: characterIcon,
       createdAt: createdAt,

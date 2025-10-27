@@ -1,5 +1,5 @@
 import 'package:clients_manager/core/models/form_field_config.dart';
-import 'package:clients_manager/core/routes/app_routes.dart';
+import 'package:clients_manager/core/routes/app_router.dart';
 import 'package:clients_manager/core/widgets/atoms/message_response_form.dart';
 import 'package:clients_manager/core/widgets/molecules/custom_form_normal.dart';
 import 'package:clients_manager/features/login/presentation/providers/login_provider.dart';
@@ -77,8 +77,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   builder: (context, provider, child) {
                     return CustomFormNormal(
                       fields: [
+                        // agregar datos del provider al formulario
                         FormFieldConfig.email(),
-                        FormFieldConfig.password(),
+                        FormFieldConfig.password(
+                          minLength: 8
+                        ),
                       ],
                       onSubmit: provider.handleLogin,
                       submitButtonText: 'Iniciar Sesión',

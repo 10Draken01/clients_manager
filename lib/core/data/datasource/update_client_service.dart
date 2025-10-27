@@ -3,15 +3,16 @@ import 'dart:io';
 
 import 'package:clients_manager/core/data/models/response_create_client_model.dart';
 import 'package:clients_manager/core/domain/data_transfer_objects/create_client/request_create_client_d_t_o.dart';
+import 'package:clients_manager/core/domain/values_objects/character_icon_types.dart';
 import 'package:clients_manager/core/network/http_service.dart';
 import 'package:clients_manager/core/network/values_objects/api_data.dart';
 
-class CreateClientService {
+class UpdateClientService {
   final HttpService httpService;
 
-  CreateClientService({required this.httpService});
+  UpdateClientService({required this.httpService});
 
-  Future<ResponseCreateClientModel> createClient(
+  Future<ResponseCreateClientModel> updateClient(
     RequestCreateClientDTO request,
   ) async {
     try {
@@ -26,7 +27,7 @@ class CreateClientService {
       Map<String, File>? files;
 
       // Determinar si se envía iconId o archivo
-      if (request.client.characterIcon.iconId != null) {
+      if (request.client.characterIcon.type != CharacterIconType.number) {
         // Caso 1: Ícono predeterminado (número 0-9)
         fields['characterIcon'] = request.client.characterIcon.iconId.toString();
       } else if (request.client.characterIcon.file != null) {
@@ -42,8 +43,8 @@ class CreateClientService {
       print('files: $files');
 
       // Realizar petición
-      final response = await httpService.postFormData(
-        ApiData.createClient,
+      final response = await httpService.putFormData(
+        ApiData.updateClient,
         headers: {'Authorization': ApiData.tokenApiClients},
         fields: fields,
         files: files,
@@ -71,7 +72,7 @@ class CreateClientService {
         message: 'Error al procesar la respuesta del servidor',
       );
     } catch (e) {
-      print('Error en CreateClientService: $e');
+      print('Error en UpdateClientService: $e');
       return ResponseCreateClientModel(
         success: false,
         message: 'Error inesperado: ${e.toString()}',

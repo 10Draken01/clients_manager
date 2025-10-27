@@ -1,6 +1,6 @@
 import 'package:clients_manager/core/domain/entities/client_entity.dart';
 import 'package:clients_manager/core/domain/values_objects/character_icons_images.dart';
-import 'package:clients_manager/core/routes/app_routes.dart';
+import 'package:clients_manager/core/routes/app_router.dart';
 import 'package:clients_manager/features/clients_display/presentation/providers/clients_display_provider.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/atoms/client_avatar.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/molecules/client_info_row.dart';
@@ -111,7 +111,7 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
 
   void _onClientTap(ClientEntity client) {
     HapticFeedback.selectionClick();
-    print('CLIENTE TAPPED: ${client.claveCliente} - ${client.nombre}');
+    print('CLIENTE TAPPED: ${client.clientKey} - ${client.name}');
     // ventana emergente con detalles del cliente
     showDialog(
       context: context,
@@ -125,7 +125,7 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
                   : null,
             ),
             const SizedBox(width: 12),
-            Expanded(child: Text(client.nombre)),
+            Expanded(child: Text(client.name)),
           ],
         ),
         content: SingleChildScrollView(
@@ -135,12 +135,12 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
               ClientInfoRow(
                 icon: Icons.badge_outlined,
                 label: "Clave de Cliente:",
-                value: client.claveCliente,
+                value: client.clientKey,
               ),
               ClientInfoRow(
                 icon: Icons.person_outline,
                 label: "Nombre:",
-                value: client.nombre,
+                value: client.name,
               ),
               ClientInfoRow(
                 icon: Icons.email_outlined,
@@ -150,7 +150,7 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
               ClientInfoRow(
                 icon: Icons.phone_outlined,
                 label: "Teléfono:",
-                value: client.celular,
+                value: client.phone,
               ),
               ClientInfoRow(
                 icon: Icons.calendar_today_outlined,
@@ -190,15 +190,15 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
     showDialog(
       context: context,
       builder: (context) => DeleteConfirmationDialog(
-        clientName: client.nombre,
+        clientName: client.name,
         onConfirm: () => _deleteClient(client),
       ),
     );
   }
 
   void _deleteClient(ClientEntity client) {
-    print('ELIMINAR CLIENTE: ${client.claveCliente} - ${client.nombre}');
-    context.read<ClientsDisplayProvider>().deleteClient(client.claveCliente);
+    print('ELIMINAR CLIENTE: ${client.clientKey} - ${client.name}');
+    context.read<ClientsDisplayProvider>().deleteClient(client.clientKey);
 
     _showSuccessSnackBar('Cliente eliminado exitosamente');
   }

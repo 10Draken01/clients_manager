@@ -19,8 +19,7 @@ class GetPageClientsService {
         headers: {'Authorization': ApiData.tokenApiClients},
       );
       final jsonData = jsonDecode(response.body);
-      final r = ResponseGetPageClientsModel.fromJson(jsonData);
-      return r;
+      return ResponseGetPageClientsModel.fromJson(jsonData);
     } catch (e) {
       print('Error en GetPageClientsService: $e');
       return ResponseGetPageClientsModel(

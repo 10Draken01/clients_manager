@@ -52,18 +52,18 @@ class ClientsDisplayProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteClient(String? claveCliente) async {
+  Future<void> deleteClient(String? clientKey) async {
     try {
       _isLoading = true;
       notifyListeners();
 
-      final request = createRequestDeleteClientUseCase.call(claveCliente);
+      final request = createRequestDeleteClientUseCase.call(clientKey);
       final response = await deleteClientUseCase(request);
 
       _message = response.message;
 
       if (response.success) {
-        _clients.removeWhere((c) => c.claveCliente == claveCliente);
+        _clients.removeWhere((c) => c.clientKey == clientKey);
       }
     } catch (e) {
       _message = e.toString();

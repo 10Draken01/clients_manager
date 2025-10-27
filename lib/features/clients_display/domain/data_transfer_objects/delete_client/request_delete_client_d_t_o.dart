@@ -1,5 +1,5 @@
 class RequestDeleteClientDTO {
-  final String claveCliente;
+  final String clientKey;
 
-  RequestDeleteClientDTO({required this.claveCliente});
+  RequestDeleteClientDTO({required this.clientKey});
 }

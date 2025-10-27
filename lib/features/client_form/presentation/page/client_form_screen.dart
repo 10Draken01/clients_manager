@@ -38,10 +38,10 @@ class _ClientFormScreenState extends State<ClientFormScreen>
     if (provider.isEditing) {
       final client = widget.clientToEdit!;
       provider.claveController = TextEditingController(
-        text: client.claveCliente,
+        text: client.clientKey,
       );
-      provider.nombreController = TextEditingController(text: client.nombre);
-      provider.celularController = TextEditingController(text: client.celular);
+      provider.nombreController = TextEditingController(text: client.name);
+      provider.celularController = TextEditingController(text: client.phone);
       provider.emailController = TextEditingController(text: client.email);
 
       // Usar el método dedicado para actualizar ícono

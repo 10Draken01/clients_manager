@@ -5,9 +5,9 @@ import 'package:clients_manager/features/register/presentation/pages/register_sc
 import 'package:flutter/material.dart';
 
 /// 🗺️ Clase para manejar todas las rutas de la app
-class AppRoutes {
+class AppRouter {
   // 🚫 Constructor privado para que no se pueda instanciar
-  AppRoutes._();
+  AppRouter._();
 
   // 📍 Nombres de las rutas (constantes)
   static const String login = '/login';

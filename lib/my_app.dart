@@ -1,6 +1,6 @@
 import 'package:clients_manager/core/di/injection_container.dart';
 import 'package:clients_manager/core/network/http_service.dart';
-import 'package:clients_manager/core/routes/app_routes.dart';
+import 'package:clients_manager/core/routes/app_router.dart';
 import 'package:clients_manager/core/theme/app_theme.dart';
 import 'package:clients_manager/features/client_form/presentation/page/client_form_screen.dart';
 import 'package:clients_manager/features/client_form/presentation/provider/client_form_provider.dart';
@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
             )
           ],
           child: MaterialApp(
+            debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme, // Tema oscuro opcional
             themeMode: ThemeMode.system, // S

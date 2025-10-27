@@ -14,7 +14,7 @@ class DeleteClientService {
   ) async {
     try {
       final response = await httpService.delete(
-        ApiData.deleteClient.replaceFirst(':claveCliente', request.claveCliente),
+        ApiData.deleteClient.replaceFirst(':clientKey', request.clientKey),
         headers: {'Authorization': ApiData.tokenApiClients},
       );
       final jsonData = jsonDecode(response.body);
