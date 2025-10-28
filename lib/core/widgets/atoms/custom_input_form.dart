@@ -88,16 +88,18 @@ class CustomInputForm extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final inputTheme = theme.inputDecorationTheme;
-    final isDark = theme.brightness == Brightness.dark;
     
     // 🎨 Determinar el color de fondo según el tema
     final backgroundColor = fillColor ?? 
         (enabled 
-            ? (isDark ? Color(0xFF2C2C2C) : Colors.white)
-            : (isDark ? Color(0xFF1E1E1E) : Colors.grey[100]!));
+            ? colorScheme.surface
+            : colorScheme.surfaceContainer);
     
     // 🎨 Determinar el color del borde según el tema
-    final borderColor = isDark ? Color(0xFF424242) : Color(0xFFE0E0E0);
+    final borderColor = colorScheme.outline;
+    
+    // 🎨 Color para bordes deshabilitados
+    final disabledBorderColor = colorScheme.outline.withOpacity(0.3);
     
     // 🎨 Determinar el radio del borde
     final radius = borderRadius ?? 12.0;
@@ -120,7 +122,9 @@ class CustomInputForm extends StatelessWidget {
       
       // 🎨 Estilo del texto dentro del input
       style: theme.textTheme.bodyLarge?.copyWith(
-        color: enabled ? colorScheme.onSurface : colorScheme.onSurface.withOpacity(0.5),
+        color: enabled 
+            ? colorScheme.onSurface 
+            : colorScheme.onSurface.withOpacity(0.5),
       ),
       
       decoration: InputDecoration(
@@ -134,7 +138,7 @@ class CustomInputForm extends StatelessWidget {
             ? Icon(
                 prefixIcon,
                 color: enabled 
-                    ? inputTheme.prefixIconColor ?? colorScheme.onSurface.withOpacity(0.6)
+                    ? (inputTheme.prefixIconColor ?? colorScheme.onSurfaceVariant)
                     : colorScheme.onSurface.withOpacity(0.3),
               )
             : null,
@@ -151,14 +155,20 @@ class CustomInputForm extends StatelessWidget {
         // 🎨 Estilos de texto (usan el tema)
         labelStyle: inputTheme.labelStyle?.copyWith(
           color: enabled 
-              ? colorScheme.onSurface.withOpacity(0.6)
+              ? colorScheme.onSurfaceVariant
+              : colorScheme.onSurface.withOpacity(0.3),
+        ) ?? TextStyle(
+          color: enabled 
+              ? colorScheme.onSurfaceVariant
               : colorScheme.onSurface.withOpacity(0.3),
         ),
         hintStyle: inputTheme.hintStyle?.copyWith(
-          color: colorScheme.onSurface.withOpacity(0.4),
+          color: colorScheme.onSurfaceVariant.withOpacity(0.7),
+        ) ?? TextStyle(
+          color: colorScheme.onSurfaceVariant.withOpacity(0.7),
         ),
         helperStyle: TextStyle(
-          color: colorScheme.onSurface.withOpacity(0.6),
+          color: colorScheme.onSurfaceVariant,
           fontSize: 12,
         ),
         errorStyle: TextStyle(
@@ -210,7 +220,7 @@ class CustomInputForm extends StatelessWidget {
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radius),
           borderSide: BorderSide(
-            color: isDark ? Color(0xFF2C2C2C) : Color(0xFFE0E0E0),
+            color: disabledBorderColor,
           ),
         ),
       ),

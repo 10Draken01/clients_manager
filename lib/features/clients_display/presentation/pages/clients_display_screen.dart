@@ -207,14 +207,12 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
   Future<void> _navigateToCreateClient() async {
     HapticFeedback.mediumImpact();
 
-    context.go(AppRoutes.clientForm.path);
+    context.pushNamed(AppRoutes.clientForm.name, extra: null);
 
   }
 
   Future<void> _navigateToEditClient(ClientEntity client) async {
-    context.goNamed(AppRoutes.clientForm.name, pathParameters: {
-      'clientKey': client.clientKey
-    });
+    context.pushNamed(AppRoutes.clientForm.name, extra: client);
 
     if (mounted) {
       _refreshClients();

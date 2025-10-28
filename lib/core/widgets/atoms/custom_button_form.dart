@@ -36,15 +36,14 @@ class CustomButtonForm extends StatelessWidget {
     // 🎨 Obtener el tema actual
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
     
     // 🎨 Determinar colores según el tema
     final bgColor = backgroundColor ?? colorScheme.primary;
-    final fgColor = textColor ?? Colors.white; // Color del texto sobre el botón
+    final fgColor = textColor ?? colorScheme.onPrimary; // Color del texto sobre el botón
     
-    // 🎨 Colores cuando está deshabilitado
-    final disabledBgColor = isDark ? Color(0xFF424242) : Colors.grey[300]!;
-    final disabledFgColor = isDark ? Color(0xFF757575) : Colors.grey[600]!;
+    // 🎨 Colores cuando está deshabilitado (usando el tema)
+    final disabledBgColor = colorScheme.surfaceContainer;
+    final disabledFgColor = colorScheme.onSurface.withOpacity(0.38);
 
     return SizedBox(
       width: width ?? double.infinity,
@@ -130,18 +129,20 @@ class CustomButtonForm extends StatelessWidget {
   factory CustomButtonForm.secondary({
     required String text,
     required VoidCallback onPressed,
+    required BuildContext context,
     bool isLoading = false,
     bool isEnabled = true,
     IconData? icon,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return CustomButtonForm(
       text: text,
       onPressed: onPressed,
       isLoading: isLoading,
       isEnabled: isEnabled,
       icon: icon,
-      backgroundColor: Colors.grey[200],
-      textColor: Colors.black87,
+      backgroundColor: colorScheme.secondaryContainer,
+      textColor: colorScheme.onSecondaryContainer,
       fontWeight: FontWeight.normal,
     );
   }
@@ -160,7 +161,7 @@ class CustomButtonForm extends StatelessWidget {
       isLoading: isLoading,
       isEnabled: isEnabled,
       icon: icon,
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.red[600],
       textColor: Colors.white,
     );
   }
@@ -179,7 +180,7 @@ class CustomButtonForm extends StatelessWidget {
       isLoading: isLoading,
       isEnabled: isEnabled,
       icon: icon,
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.green[600],
       textColor: Colors.white,
     );
   }
@@ -194,7 +195,8 @@ class CustomButtonForm extends StatelessWidget {
     IconData? icon,
     Color? borderColor,
   }) {
-    final color = borderColor ?? Theme.of(context).colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
+    final color = borderColor ?? colorScheme.primary;
     return CustomButtonForm(
       text: text,
       onPressed: onPressed,
@@ -203,6 +205,47 @@ class CustomButtonForm extends StatelessWidget {
       icon: icon,
       backgroundColor: Colors.transparent,
       textColor: color,
+    );
+  }
+
+  /// 🏭 Factory para crear botón terciario
+  factory CustomButtonForm.tertiary({
+    required String text,
+    required VoidCallback onPressed,
+    required BuildContext context,
+    bool isLoading = false,
+    bool isEnabled = true,
+    IconData? icon,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return CustomButtonForm(
+      text: text,
+      onPressed: onPressed,
+      isLoading: isLoading,
+      isEnabled: isEnabled,
+      icon: icon,
+      backgroundColor: colorScheme.tertiaryContainer,
+      textColor: colorScheme.onTertiaryContainer,
+      fontWeight: FontWeight.normal,
+    );
+  }
+
+  /// 🏭 Factory para crear botón de advertencia/warning
+  factory CustomButtonForm.warning({
+    required String text,
+    required VoidCallback onPressed,
+    bool isLoading = false,
+    bool isEnabled = true,
+    IconData? icon,
+  }) {
+    return CustomButtonForm(
+      text: text,
+      onPressed: onPressed,
+      isLoading: isLoading,
+      isEnabled: isEnabled,
+      icon: icon,
+      backgroundColor: Colors.orange[600],
+      textColor: Colors.white,
     );
   }
 }

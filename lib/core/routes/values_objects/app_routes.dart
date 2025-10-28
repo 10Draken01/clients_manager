@@ -5,5 +5,7 @@ class AppRoutes {
   static const RouteEntity register = RouteEntity('register', '/register');
   static const RouteEntity clientsDisplay = RouteEntity('clientsDisplay', '/clients_display');
   static const RouteEntity profile = RouteEntity('profile', '/profile');
-  static const RouteEntity clientForm = RouteEntity('clientForm', '/client_form/:clientKey');
+  static const RouteEntity clientForm = RouteEntity('clientForm', '/client_form');
+
+  static const RouteEntity notFound = RouteEntity('notFound', '/not_found');
 }

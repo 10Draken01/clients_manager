@@ -1,5 +1,4 @@
 import 'package:clients_manager/core/models/form_field_config.dart';
-import 'package:clients_manager/core/routes/app_router.dart';
 import 'package:clients_manager/core/routes/values_objects/app_routes.dart';
 import 'package:clients_manager/core/widgets/atoms/message_response_form.dart';
 import 'package:clients_manager/core/widgets/molecules/custom_form_normal.dart';
@@ -114,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextButton(
                       onPressed: () {
                         // TODO: Navegar a registro 
-                        context.go(AppRoutes.register.path);
+                        context.pushNamed(AppRoutes.register.name);
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,

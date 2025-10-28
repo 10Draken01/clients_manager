@@ -28,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // ✅ Cuando el registro es exitoso
       provider.onRegisterSuccess = () {
         if (mounted) {
-          context.go(AppRoutes.login.path);
+          context.pop();
         }
       };
     });
