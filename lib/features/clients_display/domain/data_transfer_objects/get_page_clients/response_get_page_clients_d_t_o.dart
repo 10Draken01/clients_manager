@@ -1,4 +1,4 @@
-import 'package:clients_manager/core/domain/entities/client_entity.dart';
+import 'package:clients_manager/features/clients_display/domain/entities/client_entity.dart';
 
 class ResponseGetPageClientsDTO {
   final bool success;

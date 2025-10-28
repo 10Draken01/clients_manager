@@ -1,6 +1,6 @@
-import 'package:clients_manager/core/domain/entities/client_entity.dart';
-import 'package:clients_manager/core/domain/usecase/delete_client/create_request_delete_client_use_case.dart';
-import 'package:clients_manager/core/domain/usecase/delete_client/delete_client_use_case.dart';
+import 'package:clients_manager/features/clients_display/domain/entities/client_entity.dart';
+import 'package:clients_manager/features/clients_display/domain/usecase/delete_client/create_request_delete_client_use_case.dart';
+import 'package:clients_manager/features/clients_display/domain/usecase/delete_client/delete_client_use_case.dart';
 import 'package:clients_manager/features/clients_display/domain/usecase/get_page_clients/create_request_get_page_clients_use_case.dart';
 import 'package:clients_manager/features/clients_display/domain/usecase/get_page_clients/get_page_clients_use_case.dart';
 import 'package:flutter/material.dart';

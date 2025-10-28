@@ -1,6 +1,6 @@
-import 'package:clients_manager/core/domain/entities/client_entity.dart';
-import 'package:clients_manager/core/domain/values_objects/character_icons_images.dart';
-import 'package:clients_manager/core/routes/app_router.dart';
+import 'package:clients_manager/features/clients_display/domain/entities/client_entity.dart';
+import 'package:clients_manager/core/routes/values_objects/app_routes.dart';
+import 'package:clients_manager/features/clients_display/domain/values_objects/character_icons_images.dart';
 import 'package:clients_manager/features/clients_display/presentation/providers/clients_display_provider.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/atoms/client_avatar.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/molecules/client_info_row.dart';
@@ -8,6 +8,7 @@ import 'package:clients_manager/features/clients_display/presentation/widgets/mo
 import 'package:clients_manager/features/clients_display/presentation/widgets/organims/clients_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class ClientsDisplayScreen extends StatefulWidget {
@@ -206,21 +207,16 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
   Future<void> _navigateToCreateClient() async {
     HapticFeedback.mediumImpact();
 
-    final result = await AppRoutes.navigateTo(context, AppRoutes.client_form);
+    context.go(AppRoutes.clientForm.path);
 
-    if (result == true && mounted) {
-      _refreshClients();
-    }
   }
 
   Future<void> _navigateToEditClient(ClientEntity client) async {
-    final result = await AppRoutes.navigateTo(
-      context,
-      AppRoutes.client_form,
-      arguments: {'clientToEdit': client},
-    );
+    context.goNamed(AppRoutes.clientForm.name, pathParameters: {
+      'clientKey': client.clientKey
+    });
 
-    if (result == true && mounted) {
+    if (mounted) {
       _refreshClients();
     }
   }

@@ -1,77 +1,39 @@
-import 'package:clients_manager/features/client_form/presentation/page/client_form_screen.dart';
+import 'package:clients_manager/core/routes/values_objects/app_routes.dart';
+import 'package:clients_manager/features/clients_display/presentation/pages/client_form_screen.dart';
 import 'package:clients_manager/features/clients_display/presentation/pages/clients_display_screen.dart';
 import 'package:clients_manager/features/login/presentation/pages/login_screen.dart';
 import 'package:clients_manager/features/register/presentation/pages/register_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-/// 🗺️ Clase para manejar todas las rutas de la app
-class AppRouter {
-  // 🚫 Constructor privado para que no se pueda instanciar
-  AppRouter._();
+final GoRouter appRouter = GoRouter(
+  initialLocation: AppRoutes.login.path,
+  routes: [
+    GoRoute(
+      name: AppRoutes.login.name,
+      path: AppRoutes.login.path,
+      builder: (context, state) => const LoginScreen(),
+      routes: [
+        GoRoute(
+          name: AppRoutes.register.name,
+          path: AppRoutes.register.path,
+          builder: (context, state) => const RegisterScreen(),
+        ),
+      ],
+    ),
+    GoRoute(
+      name: AppRoutes.clientsDisplay.name,
+      path: AppRoutes.clientsDisplay.path,
+      builder: (context, state) => const ClientsDisplayScreen(),
+      routes: [
+        GoRoute(
+          name: AppRoutes.clientForm.name,
+          path: AppRoutes.clientForm.path,
+          builder: (context, state) {
 
-  // 📍 Nombres de las rutas (constantes)
-  static const String login = '/login';
-  static const String register = '/register';
-  static const String clientsDisplay = '/clients_display';
-  static const String profile = '/profile';
-  static const String client_form = '/client_form';
-  // Agregar más rutas aquí...
-
-  /// 🗺️ Map con todas las rutas
-  static Map<String, WidgetBuilder> routes = {
-    login: (context) => const LoginScreen(),
-    register: (context) => const RegisterScreen(),
-    clientsDisplay: (context) => const ClientsDisplayScreen(),
-    client_form: (context) => ClientFormScreen(),
-    // profile: (context) => const ProfileScreen(),
-  };
-
-  /// 🚀 Método para navegar a una nueva pantalla
-  /// Se puede regresar con el botón de atrás
-  static Future<T?> navigateTo<T>(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    return Navigator.pushNamed<T>(
-      context,
-      routeName,
-      arguments: arguments,
-    );
-  }
-
-  /// 🔄 Método para reemplazar la pantalla actual
-  /// NO se puede regresar con el botón de atrás
-  static Future<T?> navigateAndReplace<T extends Object?, TO extends Object?>(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-    TO? result,
-  }) {
-    return Navigator.pushReplacementNamed<T, TO>(
-      context,
-      routeName,
-      arguments: arguments,
-      result: result,
-    );
-  }
-
-  /// 🗑️ Método para limpiar el stack completo y navegar
-  /// Elimina todas las pantallas anteriores
-  static Future<T?> navigateAndRemoveUntil<T extends Object?>(
-    BuildContext context,
-    String routeName, {
-    bool Function(Route<dynamic>)? predicate,
-  }) {
-    return Navigator.pushNamedAndRemoveUntil<T>(
-      context,
-      routeName,
-      predicate ?? (route) => false, // Por defecto elimina todo
-    );
-  }
-
-  /// ◀️ Método para regresar a la pantalla anterior
-  static void goBack<T extends Object?>(BuildContext context, [T? result]) {
-    Navigator.pop<T>(context, result);
-  }
-}
+            return const ClientFormScreen();
+          },
+        ),
+      ],
+    ),
+  ],
+);

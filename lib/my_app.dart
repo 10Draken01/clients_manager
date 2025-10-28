@@ -1,12 +1,11 @@
 import 'package:clients_manager/core/di/injection_container.dart';
 import 'package:clients_manager/core/network/http_service.dart';
 import 'package:clients_manager/core/routes/app_router.dart';
-import 'package:clients_manager/core/theme/app_theme.dart';
-import 'package:clients_manager/features/client_form/presentation/page/client_form_screen.dart';
-import 'package:clients_manager/features/client_form/presentation/provider/client_form_provider.dart';
+import 'package:clients_manager/features/clients_display/presentation/providers/client_form_provider.dart';
 import 'package:clients_manager/features/clients_display/presentation/providers/clients_display_provider.dart';
 import 'package:clients_manager/features/login/presentation/providers/login_provider.dart';
 import 'package:clients_manager/features/register/presentation/providers/register_provider.dart';
+import 'package:clients_manager/theme/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -48,13 +47,12 @@ class MyApp extends StatelessWidget {
               ),
             )
           ],
-          child: MaterialApp(
+          child: MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme, // Tema oscuro opcional
-            themeMode: ThemeMode.system, // S
-            initialRoute: AppRoutes.login,
-            routes: AppRoutes.routes,
+            theme: AppThemes.lightTheme,
+            darkTheme: AppThemes.darkTheme, // Tema oscuro opcional
+            themeMode: ThemeMode.system, // Sistema
+            routerConfig: appRouter,
           )
     ));
   }

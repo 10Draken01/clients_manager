@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 class MessageResponseForm extends StatelessWidget {
   final String message;
   final bool isSuccess;
-  final bool isDark;
+  
   const MessageResponseForm({
     super.key,
     required this.message,
     required this.isSuccess,
-    required this.isDark
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
+
     // 🎨 Colores según el tema y el tipo de mensaje
     final Color backgroundColor;
     final Color borderColor;
@@ -22,20 +24,21 @@ class MessageResponseForm extends StatelessWidget {
     if (isSuccess) {
       // ✅ Mensaje de éxito
       backgroundColor = isDark
-          ? Color(0xFF1B5E20).withOpacity(0.3) // Verde oscuro con transparencia
-          : Colors.green[50]!;
-      borderColor = isDark ? Color(0xFF4CAF50) : Colors.green;
-      textColor = isDark ? Color(0xFF81C784) : Colors.green[900]!;
+          ? colorScheme.primary.withOpacity(0.15)
+          : colorScheme.primary.withOpacity(0.1);
+      borderColor = isDark ? colorScheme.primary : Colors.green;
+      textColor = isDark ? Colors.green[300]! : Colors.green[900]!;
       icon = Icons.check_circle_outline;
     } else {
       // ❌ Mensaje de error
       backgroundColor = isDark
-          ? Color(0xFFB71C1C).withOpacity(0.3) // Rojo oscuro con transparencia
-          : Colors.red[50]!;
-      borderColor = isDark ? Color(0xFFEF5350) : Colors.red;
-      textColor = isDark ? Color(0xFFEF9A9A) : Colors.red[900]!;
+          ? colorScheme.error.withOpacity(0.15)
+          : colorScheme.error.withOpacity(0.1);
+      borderColor = isDark ? colorScheme.error : Colors.red;
+      textColor = isDark ? Colors.red[300]! : Colors.red[900]!;
       icon = Icons.error_outline;
     }
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(

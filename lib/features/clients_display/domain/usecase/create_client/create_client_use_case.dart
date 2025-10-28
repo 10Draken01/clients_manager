@@ -1,7 +1,6 @@
-
-import 'package:clients_manager/core/domain/data_transfer_objects/create_client/request_create_client_d_t_o.dart';
-import 'package:clients_manager/core/domain/data_transfer_objects/create_client/response_create_client_d_t_o.dart';
-import 'package:clients_manager/core/domain/repository/api_clients_repository.dart';
+import 'package:clients_manager/features/clients_display/domain/data_transfer_objects/create_client/request_create_client_d_t_o.dart';
+import 'package:clients_manager/features/clients_display/domain/data_transfer_objects/create_client/response_create_client_d_t_o.dart';
+import 'package:clients_manager/features/clients_display/domain/repository/api_clients_repository.dart';
 
 class CreateClientUseCase {
   final ApiClientsRepository apiClientsRepository;

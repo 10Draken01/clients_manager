@@ -1,4 +1,4 @@
-import 'package:clients_manager/core/domain/entities/client_entity.dart';
+import 'package:clients_manager/features/clients_display/domain/entities/client_entity.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/molecules/empty_clients_state.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/organims/clients_grid.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/organims/clients_list.dart';

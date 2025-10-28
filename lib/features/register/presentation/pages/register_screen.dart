@@ -1,11 +1,12 @@
 
 
 import 'package:clients_manager/core/models/form_field_config.dart';
-import 'package:clients_manager/core/routes/app_router.dart';
+import 'package:clients_manager/core/routes/values_objects/app_routes.dart';
 import 'package:clients_manager/core/widgets/atoms/message_response_form.dart';
 import 'package:clients_manager/core/widgets/molecules/custom_form_normal.dart';
 import 'package:clients_manager/features/register/presentation/providers/register_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // ✅ Cuando el registro es exitoso
       provider.onRegisterSuccess = () {
         if (mounted) {
-          AppRoutes.goBack(context);
+          context.go(AppRoutes.login.path);
         }
       };
     });
@@ -87,7 +88,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ? MessageResponseForm(
                               message: provider.message!,
                               isSuccess: provider.success,
-                              isDark: isDark,
                             )
                           : null,
                     );
@@ -107,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        AppRoutes.goBack(context);
+                        context.go(AppRoutes.login.path);
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,

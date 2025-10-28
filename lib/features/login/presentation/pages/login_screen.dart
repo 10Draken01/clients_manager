@@ -1,9 +1,11 @@
 import 'package:clients_manager/core/models/form_field_config.dart';
 import 'package:clients_manager/core/routes/app_router.dart';
+import 'package:clients_manager/core/routes/values_objects/app_routes.dart';
 import 'package:clients_manager/core/widgets/atoms/message_response_form.dart';
 import 'package:clients_manager/core/widgets/molecules/custom_form_normal.dart';
 import 'package:clients_manager/features/login/presentation/providers/login_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // ✅ Cuando el login es exitoso
       provider.onLoginSuccess = () {
         if (mounted) {
-          AppRoutes.navigateTo(context, AppRoutes.clientsDisplay);
+          context.go(AppRoutes.clientsDisplay.path);
         }
       };
     });
@@ -35,7 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
     // 🎨 Obtener el tema y colores
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       body: SafeArea(
@@ -92,7 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? MessageResponseForm(
                               message: provider.message!,
                               isSuccess: provider.success,
-                              isDark: isDark,
                             )
                           : null,
                     );
@@ -113,9 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // TODO: Navegar a registro
-                        AppRoutes.navigateTo(context, AppRoutes.register);
-                        print('Ir a registro');
+                        // TODO: Navegar a registro 
+                        context.go(AppRoutes.register.path);
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,
