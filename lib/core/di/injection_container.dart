@@ -1,5 +1,7 @@
 import 'package:clients_manager/core/data/datasource/encryption_service.dart';
+import 'package:clients_manager/core/data/repository/inactivity_repository_impl.dart';
 import 'package:clients_manager/core/data/repository/local_data_user_repository_impl.dart';
+import 'package:clients_manager/core/domain/repository/inactivity_repository.dart';
 import 'package:clients_manager/core/domain/repository/local_data_user_repository.dart';
 import 'package:clients_manager/core/domain/usecase/delete_local_data_user_encrypted_use_case.dart';
 import 'package:clients_manager/core/domain/usecase/get_local_data_user_unencrypted_use_case.dart';
@@ -35,6 +37,7 @@ class InjectionContainer {
 
   late final HttpService httpService;
   late final EncryptionService encryptionService;
+  late final InactivityRepository inactivityRepository;
 
   // Login
   late final LocalDataUserRepository localDataUserRepository;
@@ -80,6 +83,8 @@ class InjectionContainer {
     encryptionService = EncryptionService();
     encryptionService.initialize();
 
+    inactivityRepository = InactivityRepositoryImpl();
+
     localDataUserRepository = LocalDataUserRepositoryImpl(encryptionService);
 
     saveLocalDataUserEncryptedUseCase = SaveLocalDataUserEncryptedUseCase(
@@ -97,6 +102,7 @@ class InjectionContainer {
     loginUsecase = LoginUseCase(
       loginRepository: loginRepository,
       localDataUserRepository: localDataUserRepository,
+      
     );
     createRequestLoginUseCase = CreateRequestLoginUseCase();
 

@@ -36,8 +36,9 @@ class MyApp extends StatelessWidget {
               create: (_) => ClientsDisplayProvider(
                 getPageClientsUseCase: injectionContainer.getPageClientsUseCase,
                 createRequestGetPageClientsUseCase: injectionContainer.createRequestGetPageClientsUseCase,
+                inactivityRepository: injectionContainer.inactivityRepository,
                 deleteClientUseCase: injectionContainer.deleteClientUseCase,
-                createRequestDeleteClientUseCase: injectionContainer.createRequestDeleteClientUseCase
+                createRequestDeleteClientUseCase: injectionContainer.createRequestDeleteClientUseCase,
               ),
             ),
             ChangeNotifierProvider(
