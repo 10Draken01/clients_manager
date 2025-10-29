@@ -32,7 +32,6 @@ class HttpService {
   }
 
   void _saveToken(String tokenName, String token) {
-    print('Guardando token: $tokenName -> $token');
     _tokens[tokenName] = token;
   }
 
@@ -68,7 +67,6 @@ class HttpService {
   }) async {
     try {
       final uri = Uri.parse('$baseURL$endpoint');
-
       final response = await http
           .post(
             uri,
@@ -95,7 +93,13 @@ class HttpService {
     Map<String, String>? headers,
     Map<String, String>? fields,
     Map<String, File>? files,
-  }) async => _multipartRequest('POST', endpoint, headers: headers, fields: fields, files: files);
+  }) async => _multipartRequest(
+    'POST',
+    endpoint,
+    headers: headers,
+    fields: fields,
+    files: files,
+  );
 
   Future<http.Response> put(
     String endpoint, {
@@ -121,7 +125,13 @@ class HttpService {
     Map<String, String>? headers,
     Map<String, String>? fields,
     Map<String, File>? files,
-  }) async => _multipartRequest('PUT', endpoint, headers: headers, fields: fields, files: files);
+  }) async => _multipartRequest(
+    'PUT',
+    endpoint,
+    headers: headers,
+    fields: fields,
+    files: files,
+  );
 
   Future<http.Response> delete(
     String endpoint, {
@@ -158,11 +168,11 @@ class HttpService {
       final uri = Uri.parse('$baseURL$endpoint');
 
       final request = http.MultipartRequest(method, uri);
-      
+
       // Agregar headers (sin Content-Type para multipart)
       if (headers != null) {
         final customHeaders = Map<String, String>.from(headers);
-        
+
         // Formatear token si existe
         final authorizationValue = customHeaders['Authorization'];
         if (authorizationValue != null) {
@@ -171,7 +181,7 @@ class HttpService {
             customHeaders['Authorization'] = 'Bearer $token';
           }
         }
-        
+
         request.headers.addAll(customHeaders);
       }
 
@@ -181,22 +191,24 @@ class HttpService {
           final file = entry.value;
           final fieldName = entry.key;
           final filePath = file.path;
-          
+
           // Detectar el MIME type del archivo
           final mimeType = lookupMimeType(filePath);
-          
+
           print('📎 Agregando archivo:');
           print('  - Campo: $fieldName');
           print('  - Path: $filePath');
           print('  - MIME Type: $mimeType');
-          
+
           if (mimeType == null) {
-            throw Exception('No se pudo determinar el tipo MIME del archivo: $filePath');
+            throw Exception(
+              'No se pudo determinar el tipo MIME del archivo: $filePath',
+            );
           }
-          
+
           // Separar el MIME type en tipo y subtipo
           final mimeTypeParts = mimeType.split('/');
-          
+
           request.files.add(
             await http.MultipartFile.fromPath(
               fieldName,
@@ -207,7 +219,7 @@ class HttpService {
           );
         }
       }
-      
+
       // Agregar campos
       if (fields != null) {
         print('📝 Campos form-data: $fields');
@@ -215,11 +227,11 @@ class HttpService {
       }
 
       print('🚀 Enviando petición $method a: $uri');
-      
+
       final streamedResponse = await request.send().timeout(timeOut);
 
       final response = await http.Response.fromStream(streamedResponse);
-      
+
       print('📥 Respuesta recibida:');
       print('  - Status: ${response.statusCode}');
       print('  - Body: ${response.body}');

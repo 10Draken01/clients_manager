@@ -10,7 +10,7 @@ class LoginProvider with ChangeNotifier {
 
   LoginProvider({
     required this.loginUseCase,
-    required this.createRequestLoginUseCase,
+    required this.createRequestLoginUseCase
   });
 
   String? _email;
@@ -52,8 +52,7 @@ class LoginProvider with ChangeNotifier {
       _success = response.success;
       if (response.success) {
         Future.delayed(Duration(seconds: 3), () {
-          _message = null;
-          notifyListeners();
+          _clearValues();
         });
         onLoginSuccess?.call();
       }
@@ -62,14 +61,18 @@ class LoginProvider with ChangeNotifier {
     }
   }
 
+  void _clearValues() {
+    _email = null;
+    _password = null;
+    _message = null;
+    notifyListeners();
+  }
+
   void handleLogin(Map<String, String> values) async {
     try {
       // 📦 Obtener los valores
       _email = values['email']!;
       _password = values['password']!;
-
-      print('Email: $_email');
-      print('Password: $_password');
 
       // Aquí harías la llamada a tu API
       await _login(); // Simular llamada

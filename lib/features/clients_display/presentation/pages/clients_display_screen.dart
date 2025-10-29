@@ -207,8 +207,17 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
   Future<void> _navigateToCreateClient() async {
     HapticFeedback.mediumImpact();
 
-    context.pushNamed(AppRoutes.clientForm.name, extra: null);
+    // ← CAMBIO: Agregar await para esperar resultado
+    final result = await context.pushNamed(
+      AppRoutes.clientForm.name,
+      extra: null,
+    );
 
+    // ← CAMBIO: Verificar resultado y refrescar
+    if (result == true && mounted) {
+      await Future.delayed(const Duration(milliseconds: 300));
+      _refreshClients();
+    }
   }
 
   Future<void> _navigateToEditClient(ClientEntity client) async {

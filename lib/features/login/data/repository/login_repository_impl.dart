@@ -12,7 +12,6 @@ class LoginRepositoryImpl implements LoginRepository {
   Future<ResponseLoginDTO> login(RequestLoginDTO request) async {
     try {
       final response = await loginService.login(request);
-
       return response.toEntity();
     } catch (e) {
       throw Exception('Error en el repositorio: $e');

@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:clients_manager/core/routes/values_objects/app_routes.dart';
 import 'package:clients_manager/features/clients_display/domain/entities/client_entity.dart';
 import 'package:clients_manager/features/clients_display/presentation/providers/client_form_provider.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/organims/character_icon_selector.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/organims/client_form_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class ClientFormScreen extends StatefulWidget {
@@ -37,9 +39,7 @@ class _ClientFormScreenState extends State<ClientFormScreen>
 
     if (provider.isEditing) {
       final client = widget.clientToEdit!;
-      provider.claveController = TextEditingController(
-        text: client.clientKey,
-      );
+      provider.claveController = TextEditingController(text: client.clientKey);
       provider.nombreController = TextEditingController(text: client.name);
       provider.celularController = TextEditingController(text: client.phone);
       provider.emailController = TextEditingController(text: client.email);
@@ -97,11 +97,12 @@ class _ClientFormScreenState extends State<ClientFormScreen>
 
     if (provider.success) {
       _showSuccessSnackBar(
-        provider.message ?? (provider.isEditing ? 'Cliente actualizado' : 'Cliente creado'),
+        provider.message ??
+            (provider.isEditing ? 'Cliente actualizado' : 'Cliente creado'),
       );
 
       await Future.delayed(const Duration(milliseconds: 500));
-      if (mounted) Navigator.pop(context, true);
+      if (mounted) context.pop(true);
     } else {
       _showErrorSnackBar(provider.message ?? 'Error al guardar el cliente');
     }
@@ -154,6 +155,9 @@ class _ClientFormScreenState extends State<ClientFormScreen>
     provider.nombreController.dispose();
     provider.celularController.dispose();
     provider.emailController.dispose();
+
+    provider.clearForm();
+
     _fabController.dispose();
     super.dispose();
   }
@@ -168,7 +172,7 @@ class _ClientFormScreenState extends State<ClientFormScreen>
         title: Text(provider.isEditing ? 'Editar Cliente' : 'Nuevo Cliente'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(false),
         ),
       ),
       body: Form(

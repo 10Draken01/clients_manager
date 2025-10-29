@@ -1,3 +1,9 @@
+import 'package:clients_manager/core/data/datasource/encryption_service.dart';
+import 'package:clients_manager/core/data/repository/local_data_user_repository_impl.dart';
+import 'package:clients_manager/core/domain/repository/local_data_user_repository.dart';
+import 'package:clients_manager/core/domain/usecase/delete_local_data_user_encrypted_use_case.dart';
+import 'package:clients_manager/core/domain/usecase/get_local_data_user_unencrypted_use_case.dart';
+import 'package:clients_manager/core/domain/usecase/save_local_data_user_encrypted_use_case.dart';
 import 'package:clients_manager/features/clients_display/data/datasource/create_client_service.dart';
 import 'package:clients_manager/features/clients_display/data/datasource/delete_client_service.dart';
 import 'package:clients_manager/features/clients_display/data/datasource/get_page_clients_service.dart';
@@ -28,8 +34,17 @@ class InjectionContainer {
   InjectionContainer._internal();
 
   late final HttpService httpService;
+  late final EncryptionService encryptionService;
 
   // Login
+  late final LocalDataUserRepository localDataUserRepository;
+  late final SaveLocalDataUserEncryptedUseCase
+  saveLocalDataUserEncryptedUseCase;
+  late final GetLocalDataUserUnencryptedUseCase
+  getLocalDataUserUnencryptedUseCase;
+  late final DeleteLocalDataUserEncryptedUseCase
+  deleteLocalDataUserEncryptedUseCase;
+
   late final LoginService loginService;
   late final LoginRepository loginRepository;
   late final LoginUseCase loginUsecase;
@@ -62,9 +77,27 @@ class InjectionContainer {
       timeOut: Duration(seconds: 5),
     );
 
+    encryptionService = EncryptionService();
+    encryptionService.initialize();
+
+    localDataUserRepository = LocalDataUserRepositoryImpl(encryptionService);
+
+    saveLocalDataUserEncryptedUseCase = SaveLocalDataUserEncryptedUseCase(
+      localDataUserRepository,
+    );
+    getLocalDataUserUnencryptedUseCase = GetLocalDataUserUnencryptedUseCase(
+      localDataUserRepository,
+    );
+    deleteLocalDataUserEncryptedUseCase = DeleteLocalDataUserEncryptedUseCase(
+      localDataUserRepository,
+    );
+
     loginService = LoginService(httpService: httpService);
     loginRepository = LoginRepositoryImpl(loginService: loginService);
-    loginUsecase = LoginUseCase(loginRepository: loginRepository);
+    loginUsecase = LoginUseCase(
+      loginRepository: loginRepository,
+      localDataUserRepository: localDataUserRepository,
+    );
     createRequestLoginUseCase = CreateRequestLoginUseCase();
 
     registerService = RegisterService(httpService: httpService);
@@ -92,7 +125,7 @@ class InjectionContainer {
       apiClientsRepository: apiClientsRepository,
     );
     createRequestCreateClientUseCase = CreateRequestCreateClientUseCase();
-    
+
     deleteClientUseCase = DeleteClientUseCase(
       apiClientsRepository: apiClientsRepository,
     );

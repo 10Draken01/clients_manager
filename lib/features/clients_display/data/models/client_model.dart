@@ -3,25 +3,17 @@ import 'package:clients_manager/features/clients_display/domain/entities/charact
 import 'package:clients_manager/features/clients_display/domain/entities/client_entity.dart';
 
 class ClientModel extends ClientEntity {
-  final String id;
-  final String clientKey;
-  final String name;
-  final String phone;
-  final String email;
-  final CharacterIconEntity characterIcon;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   ClientModel({
-    required this.id,
-    required this.clientKey,
-    required this.name,
-    required this.phone,
-    required this.email,
-    required this.characterIcon,
-    required this.createdAt,
-    required this.updatedAt,
-  }): super(
+    required String id,
+    required String clientKey,
+    required String name,
+    required String phone,
+    required String email,
+    required CharacterIconEntity characterIcon,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+  }) : super(
     id: id,
     clientKey: clientKey,
     name: name,
