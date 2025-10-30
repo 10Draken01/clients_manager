@@ -1,7 +1,7 @@
 
 
-import 'package:clients_manager/core/models/form_field_config.dart';
-import 'package:clients_manager/core/routes/values_objects/app_routes.dart';
+import 'package:clients_manager/core/widgets/atoms/form_field_config.dart';
+import 'package:clients_manager/core/services/routes/values_objects/app_routes.dart';
 import 'package:clients_manager/core/widgets/atoms/message_response_form.dart';
 import 'package:clients_manager/core/widgets/molecules/custom_form_normal.dart';
 import 'package:clients_manager/features/register/presentation/providers/register_provider.dart';

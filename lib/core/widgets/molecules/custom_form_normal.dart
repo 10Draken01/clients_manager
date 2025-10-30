@@ -1,7 +1,7 @@
 import 'package:clients_manager/core/widgets/atoms/custom_button_form.dart';
 import 'package:clients_manager/core/widgets/atoms/custom_input_form.dart';
 import 'package:flutter/material.dart';
-import 'package:clients_manager/core/models/form_field_config.dart';
+import 'package:clients_manager/core/widgets/atoms/form_field_config.dart';
 
 class CustomFormNormal extends StatefulWidget {
   final List<FormFieldConfig> fields;

@@ -1,4 +1,4 @@
-import 'package:clients_manager/core/data/models/user_model.dart';
+import 'package:clients_manager/core/src/data/models/user_model.dart';
 import 'package:clients_manager/features/login/domain/data_transfer_objects/response_login_d_t_o.dart';
 
 class ResponseLoginModel extends ResponseLoginDTO {

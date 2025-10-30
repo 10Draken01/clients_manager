@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:clients_manager/core/network/http_service.dart';
-import 'package:clients_manager/core/network/values_objects/api_data.dart';
+import 'package:clients_manager/core/services/network/http_service.dart';
+import 'package:clients_manager/core/services/network/values_objects/api_data.dart';
 import 'package:clients_manager/features/register/data/models/register_response_model.dart';
 import 'package:clients_manager/features/register/domain/data_transfer_objects/request_register_d_t_o.dart';
 

@@ -1,4 +1,3 @@
-import 'package:clients_manager/core/domain/repository/inactivity_repository.dart';
 import 'package:clients_manager/features/clients_display/domain/entities/client_entity.dart';
 import 'package:clients_manager/features/clients_display/domain/usecase/delete_client/create_request_delete_client_use_case.dart';
 import 'package:clients_manager/features/clients_display/domain/usecase/delete_client/delete_client_use_case.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/widgets.dart';
 class ClientsDisplayProvider with ChangeNotifier {
   final GetPageClientsUseCase getPageClientsUseCase;
   final CreateRequestGetPageClientsUseCase createRequestGetPageClientsUseCase;
-  final InactivityRepository inactivityRepository;
 
   final DeleteClientUseCase deleteClientUseCase;
   final CreateRequestDeleteClientUseCase createRequestDeleteClientUseCase;
@@ -18,7 +16,6 @@ class ClientsDisplayProvider with ChangeNotifier {
   ClientsDisplayProvider({
     required this.getPageClientsUseCase,
     required this.createRequestGetPageClientsUseCase,
-    required this.inactivityRepository,
     required this.deleteClientUseCase,
     required this.createRequestDeleteClientUseCase,
   });
@@ -74,14 +71,5 @@ class ClientsDisplayProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
-  }
-
-  void inactivity_detectation(VoidCallback handleInactivity) async {
-    Duration timeout = const Duration(seconds: 5);
-
-    inactivityRepository.initialize(
-      timeout,
-      handleInactivity,
-    );
   }
 }

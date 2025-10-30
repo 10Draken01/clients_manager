@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:clients_manager/core/network/http_service.dart';
-import 'package:clients_manager/core/network/values_objects/api_data.dart';
+import 'package:clients_manager/core/services/network/http_service.dart';
+import 'package:clients_manager/core/services/network/values_objects/api_data.dart';
 import 'package:clients_manager/features/clients_display/data/models/response_create_client_model.dart';
 import 'package:clients_manager/features/clients_display/domain/data_transfer_objects/create_client/request_create_client_d_t_o.dart';
 
@@ -43,7 +43,7 @@ class CreateClientService {
       // Realizar petición
       final response = await httpService.postFormData(
         ApiData.createClient,
-        headers: {'Authorization': ApiData.tokenApiClients},
+        headers: {'Authorization': ApiData.keyTokenApiClients},
         fields: fields,
         files: files,
       );

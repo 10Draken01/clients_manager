@@ -1,11 +1,13 @@
-import 'package:clients_manager/core/data/datasource/encryption_service.dart';
-import 'package:clients_manager/core/data/repository/inactivity_repository_impl.dart';
-import 'package:clients_manager/core/data/repository/local_data_user_repository_impl.dart';
-import 'package:clients_manager/core/domain/repository/inactivity_repository.dart';
-import 'package:clients_manager/core/domain/repository/local_data_user_repository.dart';
-import 'package:clients_manager/core/domain/usecase/delete_local_data_user_encrypted_use_case.dart';
-import 'package:clients_manager/core/domain/usecase/get_local_data_user_unencrypted_use_case.dart';
-import 'package:clients_manager/core/domain/usecase/save_local_data_user_encrypted_use_case.dart';
+import 'package:clients_manager/core/services/encrypt/encryption_service.dart';
+import 'package:clients_manager/core/services/firebase/firebase_initialization.dart';
+import 'package:clients_manager/core/services/firebase/firebase_messaging_service.dart';
+import 'package:clients_manager/core/services/inactivity/data/repository/inactivity_repository_impl.dart';
+import 'package:clients_manager/core/src/data/repository/local_data_user_repository_impl.dart';
+import 'package:clients_manager/core/services/inactivity/domain/repository/inactivity_repository.dart';
+import 'package:clients_manager/core/src/domain/repository/local_data_user_repository.dart';
+import 'package:clients_manager/core/src/domain/usecase/delete_local_data_user_encrypted_use_case.dart';
+import 'package:clients_manager/core/src/domain/usecase/get_local_data_user_unencrypted_use_case.dart';
+import 'package:clients_manager/core/src/domain/usecase/save_local_data_user_encrypted_use_case.dart';
 import 'package:clients_manager/features/clients_display/data/datasource/create_client_service.dart';
 import 'package:clients_manager/features/clients_display/data/datasource/delete_client_service.dart';
 import 'package:clients_manager/features/clients_display/data/datasource/get_page_clients_service.dart';
@@ -17,8 +19,8 @@ import 'package:clients_manager/features/clients_display/domain/usecase/delete_c
 import 'package:clients_manager/features/clients_display/domain/usecase/delete_client/delete_client_use_case.dart';
 import 'package:clients_manager/features/clients_display/domain/usecase/get_page_clients/create_request_get_page_clients_use_case.dart';
 import 'package:clients_manager/features/clients_display/domain/usecase/get_page_clients/get_page_clients_use_case.dart';
-import 'package:clients_manager/core/network/http_service.dart';
-import 'package:clients_manager/core/network/values_objects/api_data.dart';
+import 'package:clients_manager/core/services/network/http_service.dart';
+import 'package:clients_manager/core/services/network/values_objects/api_data.dart';
 import 'package:clients_manager/features/login/data/datasource/login_service.dart';
 import 'package:clients_manager/features/login/data/repository/login_repository_impl.dart';
 import 'package:clients_manager/features/login/domain/repository/login_repository.dart';
@@ -29,12 +31,14 @@ import 'package:clients_manager/features/register/data/repository/register_repos
 import 'package:clients_manager/features/register/domain/repository/register_repository.dart';
 import 'package:clients_manager/features/register/domain/usecase/create_request_register_use_case.dart';
 import 'package:clients_manager/features/register/domain/usecase/register_use_case.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class InjectionContainer {
   static final InjectionContainer _instance = InjectionContainer._internal();
   factory InjectionContainer() => _instance;
   InjectionContainer._internal();
 
+  late final FirebaseMessagingService firebaseMessagingService;
   late final HttpService httpService;
   late final EncryptionService encryptionService;
   late final InactivityRepository inactivityRepository;
@@ -75,13 +79,21 @@ class InjectionContainer {
   late final CreateRequestDeleteClientUseCase createRequestDeleteClientUseCase;
 
   Future<void> init() async {
-    httpService = HttpService(
-      baseURL: ApiData.base_URL,
-      timeOut: Duration(seconds: 5),
-    );
+    await FirebaseInitialization.initialize();
 
     encryptionService = EncryptionService();
     encryptionService.initialize();
+
+    firebaseMessagingService = FirebaseMessagingService(
+      firebaseMessaging: FirebaseMessaging.instance,
+      encryptionService: encryptionService,
+    );
+
+    httpService = HttpService(
+      baseURL: ApiData.base_URL,
+      timeOut: Duration(seconds: 5),
+      encryptionService: encryptionService,
+    );
 
     inactivityRepository = InactivityRepositoryImpl();
 

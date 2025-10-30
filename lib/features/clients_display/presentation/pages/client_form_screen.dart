@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:clients_manager/core/routes/values_objects/app_routes.dart';
+import 'package:clients_manager/core/services/routes/values_objects/app_routes.dart';
 import 'package:clients_manager/features/clients_display/domain/entities/client_entity.dart';
 import 'package:clients_manager/features/clients_display/presentation/providers/client_form_provider.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/organims/character_icon_selector.dart';
@@ -28,8 +28,12 @@ class _ClientFormScreenState extends State<ClientFormScreen>
   @override
   void initState() {
     super.initState();
-    _initializeControllers();
     _initializeAnimation();
+    
+    // Diferir la inicialización después del primer frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeControllers();
+    });
   }
 
   void _initializeControllers() {
@@ -39,21 +43,23 @@ class _ClientFormScreenState extends State<ClientFormScreen>
 
     if (provider.isEditing) {
       final client = widget.clientToEdit!;
-      provider.claveController = TextEditingController(text: client.clientKey);
-      provider.nombreController = TextEditingController(text: client.name);
-      provider.celularController = TextEditingController(text: client.phone);
-      provider.emailController = TextEditingController(text: client.email);
+      // ✅ IMPORTANTE: Solo actualizar valores, NO crear nuevos controladores
+      provider.claveController.text = client.clientKey;
+      provider.nombreController.text = client.name;
+      provider.celularController.text = client.phone;
+      provider.emailController.text = client.email;
 
-      // Usar el método dedicado para actualizar ícono
+      // Actualizar ícono
       provider.updateIconSelection(
         iconIndex: client.characterIcon.iconId ?? 0,
         imageFile: null,
       );
     } else {
-      provider.claveController = TextEditingController();
-      provider.nombreController = TextEditingController();
-      provider.celularController = TextEditingController();
-      provider.emailController = TextEditingController();
+      // Limpiar controladores sin crear nuevos
+      provider.claveController.clear();
+      provider.nombreController.clear();
+      provider.celularController.clear();
+      provider.emailController.clear();
 
       provider.updateIconSelection(iconIndex: 0, imageFile: null);
     }
@@ -150,16 +156,10 @@ class _ClientFormScreenState extends State<ClientFormScreen>
 
   @override
   void dispose() {
-    final provider = context.read<ClientFormProvider>();
-    provider.claveController.dispose();
-    provider.nombreController.dispose();
-    provider.celularController.dispose();
-    provider.emailController.dispose();
-
-    provider.clearForm();
-
     _fabController.dispose();
     super.dispose();
+    // NO acceder a context.read durante dispose
+    // Los controladores se disponen en el provider
   }
 
   @override

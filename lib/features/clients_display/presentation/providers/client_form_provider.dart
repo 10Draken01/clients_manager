@@ -9,35 +9,28 @@ class ClientFormProvider with ChangeNotifier {
   final CreateClientUseCase createClientUseCase;
   final CreateRequestCreateClientUseCase createRequestCreateClientUseCase;
 
+  // Controllers - inicializados una sola vez
+  late TextEditingController _claveController;
+  TextEditingController get claveController => _claveController;
+  
+  late TextEditingController _nombreController;
+  TextEditingController get nombreController => _nombreController;
+
+  late TextEditingController _celularController;
+  TextEditingController get celularController => _celularController;
+
+  late TextEditingController _emailController;
+  TextEditingController get emailController => _emailController;
+
   ClientFormProvider({
     required this.createClientUseCase,
     required this.createRequestCreateClientUseCase,
-  });
-
-  // Controllers - NO necesitan notifyListeners en los setters
-  TextEditingController _claveController = TextEditingController();
-  TextEditingController get claveController => _claveController;
-  set claveController(TextEditingController controller) {
-    _claveController = controller;
-    // NO llamar notifyListeners aquí
-  }
-  
-  TextEditingController _nombreController = TextEditingController();
-  TextEditingController get nombreController => _nombreController;
-  set nombreController(TextEditingController controller) {
-    _nombreController = controller;
-  }
-
-  TextEditingController _celularController = TextEditingController();
-  TextEditingController get celularController => _celularController;
-  set celularController(TextEditingController controller) {
-    _celularController = controller;
-  }
-
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController get emailController => _emailController;
-  set emailController(TextEditingController controller) {
-    _emailController = controller;
+  }) {
+    // ✅ Inicializar controladores una sola vez
+    _claveController = TextEditingController();
+    _nombreController = TextEditingController();
+    _celularController = TextEditingController();
+    _emailController = TextEditingController();
   }
 
   // Icon selection - SÍ necesita notifyListeners pero con método dedicado

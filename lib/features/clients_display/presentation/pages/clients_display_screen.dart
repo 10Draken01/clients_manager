@@ -1,5 +1,5 @@
 import 'package:clients_manager/features/clients_display/domain/entities/client_entity.dart';
-import 'package:clients_manager/core/routes/values_objects/app_routes.dart';
+import 'package:clients_manager/core/services/routes/values_objects/app_routes.dart';
 import 'package:clients_manager/features/clients_display/domain/values_objects/character_icons_images.dart';
 import 'package:clients_manager/features/clients_display/presentation/providers/clients_display_provider.dart';
 import 'package:clients_manager/features/clients_display/presentation/widgets/atoms/client_avatar.dart';
@@ -53,10 +53,6 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
           _showSuccessSnackBar('Clientes cargados exitosamente');
         }
       };
-
-      provider.inactivity_detectation(() {
-        context.go(AppRoutes.login.path);
-      });
     });
   }
 
