@@ -1,7 +1,9 @@
 class ApiData {
   // Base URL para la API
   // casa
-  static const String base_URL = 'http://192.168.100.62:80/api';
+  // static const String base_URL = 'http://192.168.100.62:80/api';
+  // laptop
+  static const String base_URL = 'http://10.164.173.145:80/api';
   // localhost
   // static const String base_URL = 'http://localhost:80/api';
 

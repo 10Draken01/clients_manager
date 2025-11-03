@@ -1,4 +1,3 @@
-import 'package:clients_manager/core/src/domain/data_transfer_objects/delete_data_user/request_delete_data_user_d_t_o.dart';
 import 'package:clients_manager/core/src/domain/data_transfer_objects/delete_data_user/response_delete_data_user_d_t_o.dart';
 import 'package:clients_manager/core/src/domain/repository/local_data_user_repository.dart';
 
@@ -7,11 +6,9 @@ class DeleteLocalDataUserEncryptedUseCase {
 
   DeleteLocalDataUserEncryptedUseCase(this._localDataUserRepository);
 
-  Future<ResponseDeleteDataUserDTO> call(
-    RequestDeleteDataUserDTO request,
-  ) async {
+  Future<ResponseDeleteDataUserDTO> call() async {
     try {
-      await _localDataUserRepository.deleteLocalDataUserEncrypted(request.userId);
+      await _localDataUserRepository.deleteLocalDataUserEncrypted();
       return ResponseDeleteDataUserDTO(
         success: true,
         message: "User deleted successfully",

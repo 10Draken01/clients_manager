@@ -4,10 +4,10 @@ import 'package:clients_manager/features/login/domain/data_transfer_objects/resp
 class ResponseLoginModel extends ResponseLoginDTO {
   final bool success;
   final String message;
-  final Map<String, dynamic>? user;
+  final UserModel? user;
 
   ResponseLoginModel({required this.success, required this.message, this.user})
-    : super(success: success, message: message);
+    : super(success: success, message: message, user: user);
 
   factory ResponseLoginModel.fromJson(Map<String, dynamic> json) {
     final userJson = json['user'];
@@ -15,11 +15,11 @@ class ResponseLoginModel extends ResponseLoginDTO {
     return ResponseLoginModel(
       success: json['success'],
       message: json['message'],
-      user: json['user']
+      user: UserModel.fromJson(userJson),
     );
   }
 
   ResponseLoginDTO toEntity() {
-    return ResponseLoginDTO(success: success, message: message);
+    return ResponseLoginDTO(success: success, message: message, user: user?.toEntity());
   }
 }

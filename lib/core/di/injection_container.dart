@@ -82,7 +82,7 @@ class InjectionContainer {
     await FirebaseInitialization.initialize();
 
     encryptionService = EncryptionService();
-    encryptionService.initialize();
+    await encryptionService.initialize();
 
     firebaseMessagingService = FirebaseMessagingService(
       firebaseMessaging: FirebaseMessaging.instance,

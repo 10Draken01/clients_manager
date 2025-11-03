@@ -20,11 +20,11 @@ class DefaultFirebaseOptions {
   // 🔴 ANDROID - Reemplaza con tus valores de google-services.json
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAe67kELjJD8AcyZosGTYL-2FLNwzBcXDM',  // ← Tomar de google-services.json
-    appId: 'appmovilpm-38995ecd',
+    appId: '1:89975410429:android:60f9f5d099ed7177cd3894',
     messagingSenderId: '89975410429', // este es el project_number
     projectId: 'appmovilpm-38995ecd',
     databaseURL: 'https://appmovilpm-38995ecd.firebaseio.com',
-    storageBucket: 'appmovilpm-38995ecd.appspot.com',
+    storageBucket: 'appmovilpm-38995ecd.firebasestorage.app',
   );
 
   // 🍎 iOS - Reemplaza con tus valores de GoogleService-Info.plist

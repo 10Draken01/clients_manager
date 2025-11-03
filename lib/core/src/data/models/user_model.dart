@@ -7,7 +7,7 @@ class UserModel extends UserEntity {
     required String id,
     required String username,
     required String email,
-    required String password,
+    String? password,
   }) : super(
     id: id,
     username: username,
@@ -41,7 +41,7 @@ class UserModel extends UserEntity {
       id: json['id'] as String,
       username: json['username'] as String,
       email: json['email'] as String,
-      password: json['password'] as String,
+      password: json['password'] as String?,
     );
   }
 

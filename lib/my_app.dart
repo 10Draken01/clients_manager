@@ -5,6 +5,7 @@ import 'package:clients_manager/core/services/routes/app_router.dart';
 import 'package:clients_manager/features/clients_display/presentation/providers/client_form_provider.dart';
 import 'package:clients_manager/features/clients_display/presentation/providers/clients_display_provider.dart';
 import 'package:clients_manager/features/login/presentation/providers/login_provider.dart';
+import 'package:clients_manager/features/profile/presentation/provider/profile_provider.dart';
 import 'package:clients_manager/features/register/presentation/providers/register_provider.dart';
 import 'package:clients_manager/theme/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,11 @@ class _MyAppState extends State<MyApp> {
                 widget.injectionContainer.inactivityRepository,
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => ProfileProvider(
+            getLocalDataUserUnencryptedUseCase: widget.injectionContainer.getLocalDataUserUnencryptedUseCase
+          ),
+        )
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

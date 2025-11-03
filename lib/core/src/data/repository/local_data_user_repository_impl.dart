@@ -8,6 +8,7 @@ import 'package:clients_manager/core/src/domain/repository/local_data_user_repos
 
 class LocalDataUserRepositoryImpl implements LocalDataUserRepository{
   final EncryptionService _encryptionService;
+  final String keyDataUser =  'data_user';
 
   LocalDataUserRepositoryImpl(this._encryptionService);
 
@@ -18,7 +19,7 @@ class LocalDataUserRepositoryImpl implements LocalDataUserRepository{
       final modelUser = UserModel.fromEntity(user);
       final userJson = jsonEncode(modelUser.toJson());
       await _encryptionService.saveString(
-        user.id,
+        keyDataUser,
         userJson,
       );
     } catch (e) {
@@ -27,9 +28,10 @@ class LocalDataUserRepositoryImpl implements LocalDataUserRepository{
   }
 
   @override
-  Future<UserEntity?> getLocalDataUserUnencrypted(String userId) async {
+  Future<UserEntity?> getLocalDataUserUnencrypted() async {
     try {
-      final userJson = await _encryptionService.getString(userId);
+      final userJson = await _encryptionService.getString(keyDataUser);
+      print('Retrieved user JSON: $userJson');
       if (userJson == null) return null;
 
       final userMap = jsonDecode(userJson) as Map<String, dynamic>;
@@ -40,9 +42,9 @@ class LocalDataUserRepositoryImpl implements LocalDataUserRepository{
   }
 
   @override
-  Future<void> deleteLocalDataUserEncrypted(String userId) async {
+  Future<void> deleteLocalDataUserEncrypted() async {
     try {
-      await _encryptionService.remove(userId);
+      await _encryptionService.remove(keyDataUser);
     } catch (e) {
       throw Exception('Error deleting user: $e');
     }

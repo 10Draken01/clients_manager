@@ -6,10 +6,10 @@ import 'package:clients_manager/features/clients_display/domain/entities/client_
 import 'package:clients_manager/features/clients_display/presentation/pages/client_form_screen.dart';
 import 'package:clients_manager/features/clients_display/presentation/pages/clients_display_screen.dart';
 import 'package:clients_manager/features/login/presentation/pages/login_screen.dart';
+import 'package:clients_manager/features/profile/presentation/pages/profile_screen.dart';
 import 'package:clients_manager/features/register/presentation/pages/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 
 final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
 
@@ -120,7 +120,7 @@ final appRouter = GoRouter(
           name: AppRoutes.profile.name,
           path: AppRoutes.profile.path,
           builder: (context, state) {
-            return const Scaffold(body: Center(child: Text('Profile Screen')));
+            return ProfileScreen();
           },
         ),
 

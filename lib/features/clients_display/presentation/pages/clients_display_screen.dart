@@ -92,8 +92,7 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
 
   void _onClientTap(ClientEntity client) {
     HapticFeedback.selectionClick();
-    print('CLIENTE TAPPED: ${client.clientKey} - ${client.name}');
-    // ventana emergente con detalles del cliente
+    debugPrint('CLIENTE TAPPED: ${client.clientKey} - ${client.name}');
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -156,13 +155,12 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
     );
   }
 
-  // funcion para darle formato a dateTime
   String _formatDateTime(String dateTimeStr) {
     try {
       final dateTime = DateTime.parse(dateTimeStr);
       return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
     } catch (e) {
-      return dateTimeStr; // Retorna el string original si hay un error
+      return dateTimeStr;
     }
   }
 
@@ -178,7 +176,7 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
   }
 
   void _deleteClient(ClientEntity client) {
-    print('ELIMINAR CLIENTE: ${client.clientKey} - ${client.name}');
+    debugPrint('ELIMINAR CLIENTE: ${client.clientKey} - ${client.name}');
     context.read<ClientsDisplayProvider>().deleteClient(client.clientKey);
 
     _showSuccessSnackBar('Cliente eliminado exitosamente');
@@ -187,25 +185,20 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
   Future<void> _navigateToCreateClient() async {
     HapticFeedback.mediumImpact();
 
-    // ← CAMBIO: Agregar await para esperar resultado
     final result = await context.pushNamed(
       AppRoutes.clientForm.name,
       extra: null,
     );
 
-    // ← CAMBIO: Verificar resultado y refrescar
     if (result == true && mounted) {
       await Future.delayed(const Duration(milliseconds: 300));
       _refreshClients();
     }
   }
 
-  Future<void> _navigateToEditClient(ClientEntity client) async {
-    context.pushNamed(AppRoutes.clientForm.name, extra: client);
-
-    if (mounted) {
-      _refreshClients();
-    }
+  Future<void> _navigateToProfile() async {
+    HapticFeedback.mediumImpact();
+    context.pushNamed(AppRoutes.profile.name);
   }
 
   @override
@@ -222,6 +215,13 @@ class _ClientsDisplayScreenState extends State<ClientsDisplayScreen>
       appBar: AppBar(
         title: const Text('Mis Clientes'),
         actions: [
+          // Botón de Perfil
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: _navigateToProfile,
+            tooltip: 'Mi Perfil',
+          ),
+
           // Toggle view mode
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
